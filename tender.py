@@ -4,8 +4,8 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from pathlib import Path
 
 
-def write_title(bid_type):
-    title = tech.add_paragraph(bid_type)
+def write_title(heading):
+    title = tech.add_paragraph(heading)
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     title.runs[0].underline = title.runs[0].bold = True
     title.runs[0].font.size = Pt(16)
@@ -55,7 +55,7 @@ def write_body():
 
 def write_signature():
     signature = tech.add_paragraph('\n\nName: ')
-    signature.add_run('Than Prasad Shrestha').bold = True
+    signature.add_run(person).bold = True
     signature.add_run('\nIn the capacity of ')
     if jv:
         signature.add_run('Authorized JV Partner').bold = True
@@ -70,14 +70,17 @@ def write_signature():
     signature.add_run('\nDate: ')
     signature.add_run(date).bold = True
 
-################################################################
-# Create Technical Bid Document
-tech = Document('format.docx')
+def save_file(heading):
+    filename_tech = path + '\\' + heading + ' -' + short_name + '.docx'
+    tech.save(filename_tech)
+
 short_name = input('\nName of Contract in short: ')
 path = short_name + '\\SOURCE'
 Path(path).mkdir(parents=True, exist_ok=True)
+
+# Ask if JV
 jv = input('\nIf Joint Venture, write the full JV name, OTHERWISE skip this step: ')
-write_title('Letter of Technical Bid')
+
 date = input('\nDate: ')
 contract_name = input('\nName of the Contract: ')
 IoB = input('\nInvitation for Bid No.: ')
@@ -94,43 +97,21 @@ while True:
         break
 to = '\n'.join(lines)
 
+days = input('\nEnter bid validity period: ')
+line_of_credit = input('\nEnter Line of Credit amount: ')
+person = input('\nAuthorized Person: ')
+################################################################
+# Create Technical Bid Document
+tech = Document('format.docx')
+heading = 'Letter of Technical Bid'
+write_title(heading)
 write_details()
 write_inside_addr()
-days = input('\nEnter bid validity period: ')
-
-line_of_credit = input('\nEnter Line of Credit amount: ')
 write_body()
 write_signature()
-# Save File
-filename_tech = path + '\\' + 'Letter of Technical Bid -' + short_name + '.docx'
-tech.save(filename_tech)
-
+save_file(heading)
 ##################################################################
 # Create Price Bid Document
-price = Document('format.docx')
-
-def write_title(bid_type):
-    title = price.add_paragraph(bid_type)
-    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    title.runs[0].underline = title.runs[0].bold = True
-    title.runs[0].font.size = Pt(16)
-
-def write_details():
-    details = price.add_paragraph('Date: ')
-    details.alignment = WD_ALIGN_PARAGRAPH.RIGHT    
-    details.add_run(date).bold = True
-    details.add_run('\nName of the contract: ')    
-    details.add_run(contract_name).bold = True
-    details.add_run('\nInvitation for Bid No.: ')    
-    details.add_run(IoB).bold = True
-    details.add_run('\nContract Identification No.: ')
-    details.add_run(Contract_ID).bold = True
-
-def write_inside_addr():
-    inside_addr = tech.add_paragraph('To:\n')
-    inside_addr.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    inside_addr.add_run(to).bold = True
-
 def write_body():
     numbering_style = 'abcd'
     price.add_paragraph('We, the undersigned, declare that:')
@@ -176,28 +157,12 @@ def write_body():
     price.add_paragraph('We declare that we are solely responsible for the authenticity of the documents submitted by us.', style = numbering_style).alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     price.add_paragraph('We agree to permit the Employer/DP or its representative to inspect our accounts and records and other documents relating to the bid submission and to have them audited by auditors appointed by the Employer.', style = numbering_style).alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
 
-def write_signature():
-    signature = price.add_paragraph('\n\nName: ')
-    signature.add_run('Than Prasad Shrestha').bold = True
-    signature.add_run('\nIn the capacity of ')
-    if jv:
-        signature.add_run('Authorized JV Partner').bold = True
-    else:
-        signature.add_run('Proprietor').bold = True
-    signature.add_run('\n\n\n\n\n\nSigned: ....................')
-    signature.add_run('\nDuly authorized to sign the Bid for and on behalf of ')
-    if jv:
-        signature.add_run(jv).bold = True
-    else:
-        signature.add_run('Shree Sidhababa Nirman Sewa').bold = True
-    signature.add_run('\nDate: ')
-    signature.add_run(date).bold = True
-
-write_title('Letter of Price Bid')
+price = Document('format.docx')
+heading = 'Letter of Price Bid'
+tech = price
+write_title(heading)
 write_details()
 write_inside_addr()
 write_body()
 write_signature()
-# Save File
-filename_price = path + '\\' + 'Letter of Price Bid -' + short_name + '.docx'
-price.save(filename_price)
+save_file(heading)
