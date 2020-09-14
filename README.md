@@ -11,6 +11,7 @@ git clone https://github.com/pragyanone/tender.git
 cd tender
 python tender.py
 ```
+Then provide the details of the contract.
 This will create directories as "[tender-short-name]/SOURCE/" and the necessary documents in there.
 
 ## License
