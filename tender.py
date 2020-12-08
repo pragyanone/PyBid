@@ -5,6 +5,12 @@ from pathlib import Path
 
 
 # Start
+firm = 'Shree Siddhababa Nirman Sewa'
+firm_addr = 'Waling-9, Syangja'
+
+# Ask if JV
+jv = input('\nIf Joint Venture, write the full JV name, OTHERWISE skip this step: ')
+
 while True:
     short_name = input('\nName of Contract in short: ')
     if short_name: break
@@ -16,8 +22,6 @@ while True:
     ls = input('\nEnter 1 for Letter of Bid, and 2 for Letter of Technical and Price Bids: ')
     if ls == '1' or ls == '2': break
 
-# Ask if JV
-jv = input('\nIf Joint Venture, write the full JV name, OTHERWISE skip this step: ')
 
 date = input('\nDate: ')
 contract_name = input('\nName of the Contract: ')
@@ -39,7 +43,6 @@ days = input('\nEnter bid validity period: ')
 if ls == '2':
     line_of_credit = input('\nEnter Line of Credit amount: ')
 person = input('\nAuthorized Person: ')
-
 
 class letter:
     def __init__(self):
@@ -84,7 +87,7 @@ class letter:
         if jv:
             signature.add_run(jv).bold = True
         else:
-            signature.add_run('Shree Sidhababa Nirman Sewa').bold = True
+            signature.add_run(firm).bold = True
         signature.add_run('\nDate: ')
         signature.add_run(date).bold = True
 
@@ -223,9 +226,9 @@ class declaration(letter):
         temp = self.doc.add_paragraph('We hereby declare that we, ')
         temp.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         if jv:
-            temp.add_run(jv + ', Waling-9, Syangja').bold = True
+            temp.add_run(jv + ' ' + firm_addr).bold = True
         else:
-            temp.add_run('Shree Siddhababa Nirman Sewa, Waling-9, Syangja').bold = True
+            temp.add_run(firm + ' ' + firm_addr).bold = True
         temp.add_run(' have gone through and understood the Bidding Document and we have prepared our Bid accordingly with signed and stamped in. We shall sign and stamp each page of contract agreement document in event of award of contract of us.')
         self.doc.add_paragraph('We further confirm that we have indicated price in schedule of Rates considering detailed description of item given in schedule of rates. We confirm that the rates quoted by us in schedule of rates include all activities in each item in relation with the performance the job.').alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         self.doc.add_paragraph('Moreover, we declare ourselves that our Firm has never been declared ineligible for the public procurement proceedings and do not have any conflicts of self interest in the proposed procurement proceeding and we have not been punished by an authority in the related profession or business till this date.').alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
