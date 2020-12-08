@@ -12,7 +12,9 @@ cd tender
 python tender.py
 ```
 Then provide the details of the contract.
-This will create directories as "[tender-short-name]/SOURCE/" and the necessary documents in there.
+Following documents will be created in the *'SOURCE'* sub-directory of the corresponding *project* directory:
+1. Letter(s) of Bids
+2. Declaration by the Bidder
 
 ## License
 [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
