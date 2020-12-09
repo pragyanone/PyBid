@@ -1,7 +1,7 @@
 # tender
 
 ## Installation
-### Requirements: [python-docx](https://python-docx.readthedocs.io/en/latest/)
+Requirements: [python-docx](https://python-docx.readthedocs.io/en/latest/)
  ```bash
  pip install python-docx
  ```
