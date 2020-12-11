@@ -1,10 +1,12 @@
 # tender
 
 ## Installation
-Requirements: [python-docx](https://python-docx.readthedocs.io/en/latest/)
- ```bash
- pip install python-docx
- ```
+Requirements:
+- [python](https://www.python.org/downloads/)
+- [python-docx](https://python-docx.readthedocs.io/en/latest/)
+  ```bash
+  pip install python-docx
+  ```
 Clone the project
 ```bash
 git clone https://github.com/pragyanone/tender.git
