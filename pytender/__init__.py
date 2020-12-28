@@ -1,1 +1,1 @@
-import tender
+from . import tender
