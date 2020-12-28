@@ -18,4 +18,4 @@ Following documents will be created in the *'SOURCE'* sub-directory of the corre
 2. Declaration by the Bidder
 
 ## License
-[GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
+[MIT](https://choosealicense.com/licenses/mit/)
