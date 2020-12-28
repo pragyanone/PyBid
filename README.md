@@ -4,7 +4,9 @@
 - [python](https://www.python.org/downloads/)
 
 ## Installation
-```pip install pytender```
+```
+pip install pytender
+```
 
 ## Usage
 ```
