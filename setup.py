@@ -3,7 +3,7 @@ setup(
   name = 'tender',
   packages = ['tender'],
   version = '0.1',      # Start with a small number and increase it with every change you make
-  license='GNU General Public License v3.0',
+  license='MIT License',
   description = 'Prepare bid documents',
   author = 'Pragyan Shrestha',
   author_email = 'pragyanOne@gmail.com',
@@ -15,9 +15,9 @@ setup(
       ],
   classifiers=[
     'Development Status :: 5 - Production/Stable',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
-    'Intended Audience :: Contractors',      # Define that your audience are developers
+    'Intended Audience :: Delevopers',      # Define that your audience are developers
     'Topic :: Software Development :: Build Tools',
-    'License :: OSI Approved :: GNU General Public License v3.0',   # Again, pick a license
+     'License :: OSI Approved :: MIT License',   # Again, pick a license
     'Programming Language :: Python :: 3',      #Specify which pyhton versions that you want to support
   ],
 )
