@@ -2,7 +2,9 @@ from distutils.core import setup
 setup(
   name = 'pytender',
   packages = ['pytender'],
-  version = '0.1',      # Start with a small number and increase it with every change you make
+  package_data={'': ['format.docx']},
+  include_package_data= True,
+  version = '0.2',      # Start with a small number and increase it with every change you make
   license='MIT License',
   description = 'Prepare bid documents',
   author = 'Pragyan Shrestha',
