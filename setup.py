@@ -1,7 +1,7 @@
 from distutils.core import setup
 setup(
-  name = 'tender',
-  packages = ['tender'],
+  name = 'tender-nepal',
+  packages = ['tender-nepal'],
   version = '0.1',      # Start with a small number and increase it with every change you make
   license='MIT License',
   description = 'Prepare bid documents',
