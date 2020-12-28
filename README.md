@@ -1,12 +1,10 @@
 # tender
 
-## Requirements:
-- [python](https://www.python.org/downloads/)
-
 ## Installation
 ```
 pip install pytender
 ```
+Requirement is [python-docx](https://python-docx.readthedocs.io/en/latest/), which is installed automatically.
 
 ## Usage
 ```
