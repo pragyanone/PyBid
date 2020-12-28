@@ -1,14 +1,14 @@
 # tender
 
-## Installation
-Requirements:
+## Requirements:
 - [python](https://www.python.org/downloads/)
+
+## Installation
 - ```pip install pytender```
 
 ## Usage
 ```
-cd tender
-python tender.py
+python -m pytender.tender
 ```
 Then provide the details of the contract.
 Following documents will be created in the *'SOURCE'* sub-directory of the corresponding *project* directory:
