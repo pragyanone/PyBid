@@ -1,4 +1,4 @@
-# tender
+# PyTender
 
 ## Installation
 ```
