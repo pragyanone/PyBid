@@ -46,7 +46,9 @@ person = input('\nAuthorized Person: ')
 
 class letter:
     def __init__(self):
-        self.doc = Document('format.docx')
+        path_to_module = os.path.dirname(__file__)
+        format_path = os.path.join(path_to_module, 'format.docx')
+        self.doc = Document(format_path)
         
         
     def write_title(self, size=16):
