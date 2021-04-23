@@ -8,7 +8,7 @@ Requirement is [python-docx](https://python-docx.readthedocs.io/en/latest/), whi
 
 ## Usage
 ```
-python -m pytender.tender
+python -m pytender.gui
 ```
 Then provide the details of the contract.
 Following documents will be created in the *'SOURCE'* sub-directory of the corresponding *project* directory:
