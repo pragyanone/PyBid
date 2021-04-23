@@ -3,4 +3,5 @@ setup.cfg
 setup.py
 pytender\__init__.py
 pytender\format.docx
+pytender\gui.pyw
 pytender\tender.py
