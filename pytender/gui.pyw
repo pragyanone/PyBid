@@ -4,6 +4,7 @@ from docx.shared import Inches, Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from pathlib import Path
 import os
+import pickle
 
 
 class letter:
@@ -200,7 +201,7 @@ class declaration(letter):
         self.doc.add_paragraph('\n                                                                                                                                                            Seal of the Firm')
 
     def write_details(self):
-        details = self.doc.add_paragraph('\n')
+        self.doc.add_paragraph('\n')
         letter.write_details(self)
 
     def create_doc(self):
@@ -219,8 +220,12 @@ class declaration(letter):
 
 
 def generate_documents():
+    D = {'FIRM':v_firm_name.get(), 'FIRM_ADDR':v_firm_addr.get(), 'PERSON':person.get()}
+    settings = open('PyTender-settings.pkl', 'wb')
+    pickle.dump(D, settings)
+    
     global path
-    path = os.path.join(os.path.dirname(__file__), short_name.get(), 'SOURCE')
+    path = os.path.join(short_name.get(), 'SOURCE')
     Path(path).mkdir(parents=True, exist_ok=True)
     if large_or_small.get() == 1:
         LoB = bid()
@@ -249,7 +254,7 @@ def check_status(event=None):
 def remove_newlines(event=None):
     spam = contract_name.get(1.0, 'end-1c')
     contract_name.delete(1.0, tk.END)
-    contract_name.insert(tk.END, spam.replace('\n', ' '))
+    contract_name.insert(tk.END, spam.rstrip().replace('\n', ' '))
 
 
 root = tk.Tk()
@@ -258,8 +263,6 @@ root.columnconfigure(1, weight=5)
 root.resizable(False, False)
 
 
-FIRM = 'Shree Siddhababa Nirman Sewa'
-FIRM_ADDR = 'Waling-9, Syangja'
 v_firm_name = tk.StringVar()
 jv = tk.IntVar()
 large_or_small = tk.IntVar()
@@ -272,17 +275,28 @@ person = tk.StringVar()
 date = tk.StringVar()
 line_of_cr = tk.StringVar()
 
+try:
+    settings = open('PyTender-settings.pkl', 'rb')
+    data = pickle.load(settings)
+    print(data)
+    print(FIRM)
+except: pass
 
 tk.Label(root, text='Firm Name').grid(row=0, column=0, sticky='e')
 firm_name = tk.Entry(root, textvariable=v_firm_name)
 firm_name.grid(row=0, column=1, sticky='ew', ipady=10)
-firm_name.insert(0, FIRM)
+try:
+    firm_name.insert(0, data['FIRM'])
+except: pass
+
 tk.Radiobutton(root, text='Single',variable=jv, value=1, command=check_status).grid(row=0, column=2)
 tk.Radiobutton(root, text='JV', variable=jv, value=2, command=check_status).grid(row=0, column=3)
 tk.Label(root, text='Firm Address').grid(row=1, column=0, sticky='e')
 firm_addr = tk.Entry(root, textvariable=v_firm_addr)
 firm_addr.grid(row=1, column=1, sticky='ew')
-firm_addr.insert(0, FIRM_ADDR)
+try:
+    firm_addr.insert(0, data['FIRM_ADDR'])
+except: pass
 
 tk.Label(root, text='Name of the Contract in short').grid(row=2, column=0, sticky='e')
 tk.Entry(root, textvariable=short_name).grid(row=2, column=1, sticky='ew')
@@ -296,6 +310,7 @@ tk.Label(root, text='Contract Identification No.').grid(row=5, column=0, sticky=
 tk.Entry(root, textvariable=Contract_ID).grid(row=5, column=1, sticky='ew')
 tk.Label(root, text='To:').grid(row=6, column=0, sticky='ne')
 to = tk.Text(root, height=5)
+to.insert(1.0, 'The Chief of the Office,\n')
 to.grid(row=6, column=1, sticky='ew')
 tk.Label(root, text='Bid validity period').grid(row=7, column=0, sticky='e')
 tk.Entry(root, textvariable=days).grid(row=7, column=1, sticky='ew')
@@ -308,7 +323,11 @@ loc_entry.configure(state='disabled')
 loc_entry.grid(row=10, column=1, sticky='ew')
 
 tk.Label(root, text='Authorized Person').grid(row=11, column=0, sticky='e')
-tk.Entry(root, textvariable=person).grid(row=11, column=1, sticky='ew')
+auth_person = tk.Entry(root, textvariable=person)
+auth_person.grid(row=11, column=1, sticky='ew')
+try:
+    auth_person.insert(0, data['PERSON'])
+except: pass
 
 tk.Label(root, text='Date').grid(row=12, column=0, sticky='e')
 tk.Entry(root, textvariable=date).grid(row=12, column=1, sticky='ew')

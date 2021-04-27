@@ -52,7 +52,8 @@ class letter:
         
         
     def write_title(self, size=16):
-        title = self.doc.add_paragraph(self.heading)
+        title = self.doc.add_paragraph('\n\n')
+        title.add_run(self.heading)
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
         title.runs[0].underline = title.runs[0].bold = True
         title.runs[0].font.size = Pt(size)
