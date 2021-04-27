@@ -2,6 +2,6 @@
 setup.cfg
 setup.py
 pytender\__init__.py
+pytender\cli.py
 pytender\format.docx
 pytender\gui.pyw
-pytender\tender.py
