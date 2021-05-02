@@ -10,7 +10,7 @@ import pickle
 class letter:
     def __init__(self):
         path_to_module = os.path.dirname(__file__)
-        format_path = os.path.join(path_to_module, 'format.docx')
+        format_path = os.path.join(path_to_module, 'PyTender-format.docx')
         self.doc = Document(format_path)
         
         
