@@ -246,7 +246,7 @@ def check_status(event=None):
     else:
         loc_entry.configure(state='disabled')
 
-    if (jv.get() == 1 or jv.get() == 2) and (large_or_small.get() == 1 or large_or_small.get() == 2):
+    if jv.get() and large_or_small.get():
             generateBtn.configure(state='normal')
 
 
@@ -278,8 +278,6 @@ line_of_cr = tk.StringVar()
 try:
     settings = open('PyTender-settings.pkl', 'rb')
     data = pickle.load(settings)
-    print(data)
-    print(FIRM)
 except: pass
 
 tk.Label(root, text='Firm Name').grid(row=0, column=0, sticky='e')
