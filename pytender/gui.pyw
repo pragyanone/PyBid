@@ -2,7 +2,7 @@ import tkinter as tk
 from pathlib import Path
 import os
 import pickle
-from classes import *
+from .classes import *
 
 
 settings_path = os.path.join(os.path.dirname(__file__), 'PyTender-settings.pkl')

@@ -4,13 +4,13 @@ setup(
   packages = ['pytender'],
   package_data={'': ['PyTender-format.docx', 'gui.pyw', 'classes.py']},
   include_package_data= True,
-  version = '1.4',      # Start with a small number and increase it with every change you make
+  version = '1.4.1',      # Start with a small number and increase it with every change you make
   license='MIT License',
   description = 'Prepare bid documents',
   author = 'Pragyan Shrestha',
   author_email = 'pragyanOne@gmail.com',
   url = 'https://github.com/pragyanone/tender',
-  download_url = 'https://github.com/pragyanone/pytender/releases/tag/1.4.tar.gz',
+  download_url = 'https://github.com/pragyanone/pytender/archive/refs/tags/1.4.1.tar.gz',
   keywords = ['ppmo', 'bid', 'tender',],   # Keywords that define your package best
   install_requires=[
           'python-docx',
