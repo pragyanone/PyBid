@@ -4,7 +4,7 @@ setup(
   packages = ['pytender'],
   package_data={'': ['PyTender-format.docx', 'gui.pyw', 'classes.py']},
   include_package_data= True,
-  version = '1.3',      # Start with a small number and increase it with every change you make
+  version = '1.4',      # Start with a small number and increase it with every change you make
   license='MIT License',
   description = 'Prepare bid documents',
   author = 'Pragyan Shrestha',
