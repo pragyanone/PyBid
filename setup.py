@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'pytender',
   packages = ['pytender'],
-  package_data={'': ['format.docx', 'gui.pyw']},
+  package_data={'': ['PyTender-format.docx', 'gui.pyw', 'classes.py']},
   include_package_data= True,
   version = '1.3',      # Start with a small number and increase it with every change you make
   license='MIT License',
@@ -10,7 +10,7 @@ setup(
   author = 'Pragyan Shrestha',
   author_email = 'pragyanOne@gmail.com',
   url = 'https://github.com/pragyanone/tender',
-  download_url = 'https://github.com/pragyanone/pytender/archive/refs/tags/v1.3.tar.gz',
+  download_url = 'https://github.com/pragyanone/pytender/releases/tag/1.4.tar.gz',
   keywords = ['ppmo', 'bid', 'tender',],   # Keywords that define your package best
   install_requires=[
           'python-docx',

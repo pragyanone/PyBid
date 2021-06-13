@@ -1,3 +1,4 @@
+
 # PyTender
 
 ## Installation
@@ -11,9 +12,10 @@ Requirement is [python-docx](https://python-docx.readthedocs.io/en/latest/), whi
 python -m pytender.gui
 ```
 Then provide the details of the contract.
-Following documents will be created in the *'SOURCE'* sub-directory of the corresponding *project* directory:
-1. Letter(s) of Bids
-2. Declaration by the Bidder
+Documents will be created in the *'SOURCE'* sub-directory of the corresponding *project* directory.
+
+*Tip: add a shortcut to* ```python -m pytender.gui``` *in your favourite directory.*
+![Check Gif @ blob/PyTender.gif](https://github.com/pragyanone/pytender/blob/master/blob/PyTender.gif)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
