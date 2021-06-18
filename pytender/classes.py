@@ -5,10 +5,12 @@ import os
 
 
 class letter:
-    def __init__(self, path, firm_name, firm_addr, jv, short_name, contract_name, IoB, contract_ID, to, days, line_of_cr, person, date):
+    def __init__(self, path, firm_name, firm_addr, jv_name, jv_addr, jv, short_name, contract_name, IoB, contract_ID, to, days, line_of_cr, person, date):
         self.path = path
         self.firm_name = firm_name
         self.firm_addr = firm_addr
+        self.jv_name = jv_name
+        self.jv_addr = jv_addr
         self.jv = jv
         self.short_name = short_name
         self.contract_name = contract_name
@@ -62,7 +64,10 @@ class letter:
             signature.add_run(self.designation).bold = True
         signature.add_run('\n\n\n\n\n\nSigned: ....................')
         signature.add_run('\nDuly authorized to sign the Bid for and on behalf of ')
-        signature.add_run(self.firm_name).bold = True
+        if self.jv_name:
+            signature.add_run(self.jv_name).bold = True
+        else:
+            signature.add_run(self.firm_name).bold = True
         signature.add_run('\nDate: ')
         signature.add_run(self.date).bold = True
 

@@ -1,8 +1,32 @@
-from docx import Document
-from docx.shared import Inches, Pt
-from docx.enum.text import WD_ALIGN_PARAGRAPH
 from pathlib import Path
 import os
+import pickle
+from .classes import *
+
+
+settings_path = os.path.join(os.path.dirname(__file__), 'PyTender-settings.pkl')
+D = {'FIRM':v_firm_name.get(), 'FIRM_ADDR':v_firm_addr.get(), 'PERSON':person.get()}
+settings = open(settings_path, 'wb')
+pickle.dump(D, settings)
+
+firm_name, firm_addr, jv, short_name, contract_name, IoB, contract_ID, to, days, line_of_cr, person, date
+try:
+    settings = open(settings_path, 'rb')
+    data = pickle.load(settings)
+    firm_name = input(f'Current firm name: {data['FIRM']}\nEnter new firm name if required: ') or firm_name
+    firm_addr = input(f'Current firm address: {data['FIRM_ADDR']}\nEnter new firm address if required: ') or firm_addr
+    jv = input('\nIf Joint Venture, write the full JV name, OTHERWISE skip this step: ')
+
+except:
+
+
+
+
+
+global path
+    path = os.path.join(short_name.get(), 'SOURCE')
+    Path(path).mkdir(parents=True, exist_ok=True)
+
 
 # Start
 firm = 'Shree Siddhababa Nirman Sewa'
