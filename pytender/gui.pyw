@@ -61,14 +61,14 @@ def check_status(event=None):
     if jv.get() == 2: 
         jv_name_label.grid(sticky='e')        
         jv_name_entry.grid(row=2, column=1, sticky='ew')
-        jv_addr_label.grid(sticky='e')
-        jv_addr_entry.grid(row=3, column=1, sticky='ew')
+        #jv_addr_label.grid(sticky='e')
+        #jv_addr_entry.grid(row=3, column=1, sticky='ew')
 
     if jv.get() == 1:
         jv_name_label.grid_forget()
         jv_name_entry.grid_forget()
-        jv_addr_label.grid_forget()
-        jv_addr_entry.grid_forget()
+        #jv_addr_label.grid_forget()
+        #jv_addr_entry.grid_forget()
 
 
 def remove_newlines(event=None):
