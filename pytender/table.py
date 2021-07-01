@@ -12,6 +12,7 @@ col1 = t1.columns[0].cells
 col1
 col1[0].text = 'Partner'
 
+
 col1[1].text = str1
 
 name, designation, company, address =
