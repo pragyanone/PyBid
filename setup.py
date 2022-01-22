@@ -10,7 +10,7 @@ setup(
   author = 'Pragyan Shrestha',
   author_email = 'pragyanOne@gmail.com',
   url = 'https://github.com/pragyanone/tender',
-  download_url = 'https://github.com/pragyanone/pytender/archive/refs/tags/1.4.2.tar.gz',
+  download_url = 'https://github.com/pragyanone/pytender/archive/refs/tags/1.5.tar.gz',
   keywords = ['ppmo', 'bid', 'tender',],   # Keywords that define your package best
   install_requires=[
           'python-docx',
