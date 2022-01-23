@@ -8,7 +8,7 @@ setup(
     packages=["pytender"],
     package_data={"": ["PyTender-format.docx", "gui.pyw", "classes.py"]},
     # include_package_data=True,
-    version="1.5.2",  # Start with a small number and increase it with every change you make
+    version="1.5.2.1",  # Start with a small number and increase it with every change you make
     license="MIT License",
     description="Prepare bid documents",
     long_description=long_description,
@@ -16,7 +16,7 @@ setup(
     author="Pragyan Shrestha",
     author_email="pragyanOne@gmail.com",
     url="https://github.com/pragyanone/tender",
-    download_url="https://github.com/pragyanone/pytender/archive/refs/tags/1.5.2.tar.gz",
+    download_url="https://github.com/pragyanone/pytender/archive/refs/tags/1.5.2.1.tar.gz",
     keywords=[
         "ppmo",
         "bid",
