@@ -90,7 +90,7 @@ class letter:
             signature.add_run(self.jv_repr.rstrip()).bold = True
         signature.add_run("\nIn the capacity of ")
         if self.jv == 2:
-            signature.add_run("Authorized JV Partner").bold = True
+            signature.add_run("Authorized J.V. Representative").bold = True
         elif self.jv == 1:
             signature.add_run(self.designation).bold = True
         signature.add_run("\n\n\n\n\n\nSigned: ....................")
@@ -470,10 +470,10 @@ class jv_agr(letter):
             "All the parties have agreed to make bid bond and required jointly/separately or any one party."
         )
         self.add_line(
-            "All Parties will make the rates for preparation of tender document and the final rates to be quoted will be made and decided by board consisting of representative form all parties."
+            "All Parties will make the rates for preparation of tender document and the final rates to be quoted will be made and decided by board consisting of representatives form all parties."
         )
         self.add_line(
-            "All  of the parties have agreed that a board consisting of representative from each party will be formed which will be responsible for overall management to the job order to fulfill and the contractual obligation to complete the job within the stipulated time period."
+            "All  of the parties have agreed that a board consisting of a representative from each party will be formed which will be responsible for overall management to the job order to fulfill and the contractual obligation to complete the job within the stipulated time period."
         )
         self.add_line(
             "All of the parties have agreed to follow the instructions of the tender document and also the instruction of the consultant and the employer."
@@ -498,7 +498,7 @@ class jv_agr(letter):
         )
 
         self.doc.add_paragraph(
-            "The authorized representative of the parties here-to have set their hands-on name and seal on the day-year first above written."
+            "The authorized representatives of the parties here-to have set their hands-on name and seal on the day-year first above written."
         )
 
     def create_table(self):
@@ -547,7 +547,7 @@ class poa(jv_agr):
         temp.add_run(" hereby provide power of attorney to ")
         temp.add_run(self.jv_repr).bold = True
         temp.add_run(
-            ', hereby called the "Authorized Representative" of this Joint Venture team to do and execute all of, and any of the acts and things as mentioned below in acceptance of all parties for the Execution of '
+            ', hereby called the "Authorized J.V. Representative" of this Joint Venture team to do and execute all of, and any of the acts and things as mentioned below in acceptance of all parties for the Execution of '
         )
         temp.add_run(self.contract_name).bold = True
         temp.add_run(", Contract ID No.: ")
@@ -565,7 +565,7 @@ class poa(jv_agr):
         )
 
         self.doc.add_paragraph(
-            "As the joint venture hereby agree that all aforesaid acts, deeds and things done by the authorized representative shall be constructed as acts, deeds and things done by the joint venture and undertakes to rectify and conform all and whatsoever the authorized representative shall lawfully do the case to be done for joint venture of power hereby given."
+            "As the joint venture hereby agree that all aforesaid acts, deeds and things done by the authorized jv representative shall be constructed as acts, deeds and things done by the joint venture and undertakes to rectify and conform all and whatsoever the authorized jv representative shall lawfully do the case to be done for joint venture of power hereby given."
         ).alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
 
         temp = self.doc.add_paragraph(
@@ -576,7 +576,7 @@ class poa(jv_agr):
 
         temp = self.doc.add_paragraph("\n" * 4)
         temp.add_run(self.jv_repr).bold = True
-        temp.add_run("\nSpecimen signature of Authorized Representative")
+        temp.add_run("\nSpecimen signature of Authorized J.V. Representative")
 
     def create_doc(self):
         for section in self.doc.sections:
