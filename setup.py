@@ -1,16 +1,23 @@
-from distutils.core import setup
+from setuptools import setup
+from pathlib import Path
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
+print(long_description)
 setup(
   name = 'pytender',
   packages = ['pytender'],
   package_data={'': ['PyTender-format.docx', 'gui.pyw', 'classes.py']},
   include_package_data= True,
-  version = '1.4.2',      # Start with a small number and increase it with every change you make
+  version = '1.5.2',      # Start with a small number and increase it with every change you make
   license='MIT License',
   description = 'Prepare bid documents',
+  long_description = long_description,
+  long_description_content_type='text/markdown',
   author = 'Pragyan Shrestha',
   author_email = 'pragyanOne@gmail.com',
   url = 'https://github.com/pragyanone/tender',
-  download_url = 'https://github.com/pragyanone/pytender/archive/refs/tags/1.5.tar.gz',
+  download_url = 'https://github.com/pragyanone/pytender/archive/refs/tags/1.5.2.tar.gz',
   keywords = ['ppmo', 'bid', 'tender',],   # Keywords that define your package best
   install_requires=[
           'python-docx==0.8.11',
