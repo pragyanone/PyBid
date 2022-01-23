@@ -1,3 +1,4 @@
 *.pkl
 __pycache__
 dist
+pytender.egg-info
