@@ -13,6 +13,7 @@ class letter:
         firm_addr,
         jv_name,
         jv_addr,
+        jv_repr,
         jv,
         short_name,
         contract_name,
@@ -30,6 +31,7 @@ class letter:
         self.firm_addr = firm_addr
         self.jv_name = jv_name
         self.jv_addr = jv_addr
+        self.jv_repr = jv_repr
         self.jv = jv
         self.short_name = short_name
         self.contract_name = contract_name
@@ -41,6 +43,9 @@ class letter:
         self.person = person
         self.date = date
         self.jvList = jvList
+
+        self.jvList = [line.split("; ") for line in self.jvList.split("\n")]
+        self.jvList.sort()
 
         path_to_module = os.path.dirname(__file__)
         format_path = os.path.join(path_to_module, "PyTender-format.docx")
@@ -79,7 +84,10 @@ class letter:
 
     def write_signature(self):
         signature = self.doc.add_paragraph("\n\nName: ")
-        signature.add_run(self.person.rstrip()).bold = True
+        if self.jv == 1:
+            signature.add_run(self.person.rstrip()).bold = True
+        elif self.jv == 2:
+            signature.add_run(self.jv_repr.rstrip()).bold = True
         signature.add_run("\nIn the capacity of ")
         if self.jv == 2:
             signature.add_run("Authorized JV Partner").bold = True
@@ -328,8 +336,7 @@ class declaration(letter):
         letter.write_details(self)
 
     def create_doc(self, size):
-        sections = self.doc.sections
-        for section in sections:
+        for section in self.doc.sections:
             section.top_margin = Inches(1)
             section.bottom_margin = Inches(1)
             section.left_margin = Inches(1)
@@ -378,25 +385,23 @@ class jv_agr(letter):
         temp = self.doc.paragraphs[0]
         temp.add_run("JOINT VENTURE AGREEMENT").underline = True
         temp.runs[0].bold = True
-        temp = self.doc.add_paragraph("This AGREEMENT of JOINT VENTURE is made on")
+        temp = self.doc.add_paragraph("This AGREEMENT of JOINT VENTURE is made on ")
         temp.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         temp.add_run(self.date).bold = True
-        jvList = [line.split("; ") for line in self.jvList.split("\n")]
-        jvList.sort()
-        if len(jvList) > 2:
+        if len(self.jvList) > 2:
             temp.add_run(" among ")
         else:
             temp.add_run(" between ")
 
-        for partner in jvList:
+        for partner in self.jvList:
             temp.add_run(partner[3] + ", " + partner[4]).bold = True
 
             if partner[0] == "1":
                 temp.add_run(' (hereinafter called the "Partner-In-Charge")')
-            elif partner[0] == str(len(jvList)):
+            elif partner[0] == str(len(self.jvList)):
                 temp.add_run(' (hereinafter called the "Second Partner(s)")')
 
-            if partner[0] == str(len(jvList) - 1):
+            if partner[0] == str(len(self.jvList) - 1):
                 temp.add_run(" and ")
             else:
                 temp.add_run(", ")
@@ -425,9 +430,9 @@ class jv_agr(letter):
         temp.add_run(".")
 
         temp = self.add_line("The Lead partner of the joint venture will be ")
-        temp.add_run(jvList[0][3]).bold = True
+        temp.add_run(self.jvList[0][3]).bold = True
         temp.add_run(" with its head office at ")
-        temp.add_run(jvList[0][4]).bold = True
+        temp.add_run(self.jvList[0][4]).bold = True
         temp.add_run(".")
 
         self.add_line(
@@ -438,7 +443,7 @@ class jv_agr(letter):
             "The specific responsibility of each party in the joint venture in brief would be as below "
         )
         temp.alignment = WD_ALIGN_PARAGRAPH.LEFT
-        for partner in jvList:
+        for partner in self.jvList:
             temp.add_run("\n")
             temp.add_run(partner[3]).bold = True
             temp.add_run(
@@ -451,11 +456,11 @@ class jv_agr(letter):
         temp = self.add_line(
             "All the parties have agreed that the contribution of each party for this contract and the loss will also be shared as per each party contribution "
         )
-        for partner in jvList:
+        for partner in self.jvList:
             temp.add_run(
                 partner[3] + "-" + partner[5] + "% [" + num2words(partner[5]) + "]"
             ).bold = True
-            if partner[0] == str(len(jvList) - 1):
+            if partner[0] == str(len(self.jvList) - 1):
                 temp.add_run(" and ")
             else:
                 temp.add_run(", ")
@@ -479,9 +484,12 @@ class jv_agr(letter):
         self.add_line(
             "All of the parties have agreed to open current account in the name of joint venture and will be operated by the representative from all parties."
         )
-        self.add_line(
-            "All disputes relating to or arising out of the agreement will be sealed amicably between participating parties failing which shall be referred to arbitration as provided by Nepalese law and will be subject to Waling-9, Syangja for Justification."
+        temp = self.add_line(
+            "All disputes relating to or arising out of the agreement will be sealed amicably between participating parties failing which shall be referred to arbitration as provided by Nepalese law and will be subjected to "
         )
+        temp.add_run(self.jv_addr).bold = True
+        temp.add_run(" for Justification.")
+
         self.add_line(
             "All the contract is awarded, this agreement will be in effect till the construction is completed in all respect and thereafter this agreement will null and void. If, otherwise the contact is not awarded, this agreement will be in effect till a decision by employer is made to award the contract, and thereafter will be null and void."
         )
@@ -493,9 +501,10 @@ class jv_agr(letter):
             "The authorized representative of the parties here-to have set their hands-on name and seal on the day-year first above written."
         )
 
-        table = self.doc.add_table(rows=2, cols=len(jvList))
+    def create_table(self):
+        table = self.doc.add_table(rows=2, cols=len(self.jvList))
         table.style = "CenteredTable"
-        for i, partner in enumerate(jvList):
+        for i, partner in enumerate(self.jvList):
             if i > 0:
                 table.rows[0].cells[i].text = "Secondary Partner"
             else:
@@ -513,4 +522,70 @@ class jv_agr(letter):
             section.left_margin = Cm(1)
             section.right_margin = Cm(1)
         self.write_body()
+        self.create_table()
+        self.save_file()
+
+
+class poa(jv_agr):
+    heading = "PoA"
+
+    def write_date(self):
+        temp = self.doc.paragraphs[0]
+        temp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        temp.add_run("\n\n\n\n\n\nDate: ")
+        temp.add_run(self.date).bold = True
+
+    def write_body(self):
+        temp = self.doc.add_paragraph("Sub: Power of Attorney")
+        temp.bold = True
+        temp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+        self.doc.add_paragraph("Dear Sir / Madam,")
+        temp = self.doc.add_paragraph("We as the joint venture partners of ")
+        temp.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        temp.add_run(self.jv_name + "," + self.jv_addr).bold = True
+        temp.add_run(" hereby provide power of attorney to ")
+        temp.add_run(self.jv_repr).bold = True
+        temp.add_run(
+            ', hereby called the "Authorized Representative" of this Joint Venture team to do and execute all of, and any of the acts and things as mentioned below in acceptance of all parties for the Execution of '
+        )
+        temp.add_run(self.contract_name).bold = True
+        temp.add_run(", Contract ID No.: ")
+        temp.add_run(self.contract_ID).bold = True
+        temp.add_run(' (hereinafter called "The Works").')
+
+        self.add_line(
+            "To sign contract agreement document on behalf of the joint venture."
+        )
+        self.add_line(
+            "To do all construction activities related with the contract, submit bills, and receive payment on behalf of the joint venture."
+        )
+        self.add_line(
+            "To open a bank account and operate on behalf of the joint venture."
+        )
+
+        self.doc.add_paragraph(
+            "As the joint venture hereby agree that all aforesaid acts, deeds and things done by the authorized representative shall be constructed as acts, deeds and things done by the joint venture and undertakes to rectify and conform all and whatsoever the authorized representative shall lawfully do the case to be done for joint venture of power hereby given."
+        ).alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+
+        temp = self.doc.add_paragraph(
+            "In witness whereof the Joint Venture has executed these deeds on "
+        )
+        temp.add_run(self.date).bold = True
+        temp.add_run(".")
+
+        temp = self.doc.add_paragraph("\n" * 4)
+        temp.add_run(self.jv_repr).bold = True
+        temp.add_run("\nSpecimen signature of Authorized Representative")
+
+    def create_doc(self):
+        for section in self.doc.sections:
+            section.top_margin = Inches(0.5)
+            section.bottom_margin = Inches(0.5)
+            section.left_margin = Inches(0.5)
+            section.right_margin = Inches(0.5)
+        self.write_date()
+        self.write_inside_addr()
+        self.write_body()
+        self.create_table()
         self.save_file()

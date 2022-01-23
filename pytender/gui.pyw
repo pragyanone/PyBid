@@ -26,6 +26,7 @@ def generate_documents():
         v_firm_addr.get(),
         v_jv_name.get(),
         v_jv_addr.get(),
+        v_jv_repr.get(),
         jv.get(),
         short_name.get(),
         contract_name.get(1.0, "end-1c"),
@@ -44,6 +45,8 @@ def generate_documents():
     if jv.get() == 2:
         jvAgr = jv_agr(*args)
         jvAgr.create_doc()
+        PoA = poa(*args)
+        PoA.create_doc()
 
     if large_or_small.get() == 1:
         LoB = bid(*args)
@@ -55,10 +58,11 @@ def generate_documents():
         LoPB.create_doc()
 
     if "pvt" not in v_firm_name.get().lower():
-        PoA = poa_self(*args)
-        PoA.create_doc(12)
+        PoAself = poa_self(*args)
+        PoAself.create_doc(12)
 
-    print("EndOfCode Reached")
+    EndofCode = tk.Label(contract_frame, text="SUCCESS", bg="lime green")
+    EndofCode.grid(row=11, column=2, sticky="e")
 
 
 def check_status(event=None):
@@ -78,13 +82,19 @@ def check_status(event=None):
                 generateBtn.configure(state="disabled")
 
     if jv.get() == 2:
-        jv_name_label.grid(sticky="e")
-        jv_name_entry.grid(row=2, column=1, sticky="ew")
+        jvSubFrame.grid(row=2, column=1, sticky="ew")
+        jvSubFrame.columnconfigure(1, weight=3)
+        jvSubFrame.columnconfigure(3, weight=2)
+        jv_name_label.grid(row=0, column=0, sticky="e")
+        jv_name_entry.grid(row=0, column=1, columnspan=3, sticky="ew")
         jv_name_entry.bind("<FocusOut>", check_status)
 
-        jv_addr_label.grid(sticky="e")
-        jv_addr_entry.grid(row=3, column=1, sticky="ew")
+        jv_addr_label.grid(row=1, column=0, sticky="e")
+        jv_addr_entry.grid(row=1, column=1, sticky="ew")
 
+        jv_repr_label.grid(row=1, column=2, sticky="e")
+
+        jv_repr_entry.grid(row=1, column=3, sticky="ew")
         jv_list_label.grid(column=1, sticky="ew")
         jv_list_entry.grid(column=1, sticky="ew")
         jv_list_entry.bind("<FocusOut>", remove_newlines)
@@ -93,6 +103,7 @@ def check_status(event=None):
     if jv.get() == 1:
         jv_name_label.grid_forget()
         jv_name_entry.grid_forget()
+        jv_name_entry.delete(0, tk.END)
 
         jv_addr_label.grid_forget()
         jv_addr_entry.grid_forget()
@@ -139,6 +150,7 @@ days = tk.StringVar()
 person = tk.StringVar()
 date = tk.StringVar()
 line_of_cr = tk.StringVar()
+v_jv_repr = tk.StringVar()
 
 
 try:
@@ -172,10 +184,14 @@ tk.Radiobutton(
 tk.Label(firm_frame, text="Firm Address", bg="Snow3").grid(row=1, sticky="e")
 firm_addr = tk.Entry(firm_frame, textvariable=v_firm_addr)
 firm_addr.grid(row=1, column=1, sticky="ew")
-jv_name_label = tk.Label(firm_frame, text="JV Name", bg="Snow3")
-jv_name_entry = tk.Entry(firm_frame, textvariable=v_jv_name)
-jv_addr_label = tk.Label(firm_frame, text="JV Address", bg="Snow3")
-jv_addr_entry = tk.Entry(firm_frame, textvariable=v_jv_addr)
+
+jvSubFrame = tk.Frame(firm_frame, bg="Snow3")
+jv_name_label = tk.Label(jvSubFrame, text="JV Name", bg="Snow3")
+jv_name_entry = tk.Entry(jvSubFrame, textvariable=v_jv_name)
+jv_addr_label = tk.Label(jvSubFrame, text="JV Address", bg="Snow3")
+jv_addr_entry = tk.Entry(jvSubFrame, textvariable=v_jv_addr)
+jv_repr_label = tk.Label(jvSubFrame, text="JV Representative")
+jv_repr_entry = tk.Entry(jvSubFrame, textvariable=v_jv_repr)
 
 jv_list_label = tk.Label(
     firm_frame,
@@ -238,7 +254,7 @@ tk.Entry(contract_frame, textvariable=date).grid(row=12, column=1, sticky="ew")
 generateBtn = tk.Button(
     contract_frame, text="Generate Documents", command=generate_documents
 )
-generateBtn.grid(row=12, column=2, sticky="ew", columnspan=2, padx=15, pady=15)
+generateBtn.grid(row=12, column=2, columnspan=2, padx=15, pady=15)
 generateBtn.configure(state="disabled")
 
 try:
@@ -248,9 +264,10 @@ try:
     designation = "Managing Director" if "pvt" in data["FIRM"].lower() else "Proprietor"
     jv_list_entry.insert(
         tk.END,
-        f"1; {data['PERSON']}; {designation}; {data['FIRM']}; {data['FIRM_ADDR']}; 60",
+        f"2; {data['PERSON']}; {designation}; {data['FIRM']}; {data['FIRM_ADDR']}; 50",
     )
     jv_addr_entry.insert(0, data["FIRM_ADDR"])
+    jv_repr_entry.insert(0, data["PERSON"])
 
 except:
     pass
