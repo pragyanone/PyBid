@@ -191,7 +191,7 @@ jv_name_label = tk.Label(jvSubFrame, text="JV Name", bg="Snow3")
 jv_name_entry = tk.Entry(jvSubFrame, textvariable=v_jv_name)
 jv_addr_label = tk.Label(jvSubFrame, text="JV Address", bg="Snow3")
 jv_addr_entry = tk.Entry(jvSubFrame, textvariable=v_jv_addr)
-jv_repr_label = tk.Label(jvSubFrame, text="JV Representative")
+jv_repr_label = tk.Label(jvSubFrame, text="JV Representative", bg="Snow3")
 jv_repr_entry = tk.Entry(jvSubFrame, textvariable=v_jv_repr)
 
 jv_list_label = tk.Label(
