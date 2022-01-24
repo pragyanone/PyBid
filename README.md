@@ -24,7 +24,7 @@ Documents will be created in the *'SOURCE'* sub-directory of the corresponding *
 
 ## Install on Android
 1. Install [Termux](https://f-droid.org/en/packages/com.termux)
-2. `pkg install python libxml2 libxslt libiconv`
+2. `pkg install python libxml2 libxslt libiconv clang`
 3. `pip install wheel`
 4. `pip install lxml pytender`
 5. Install and setup a [Graphical Environment](https://wiki.termux.com/wiki/Graphical_Environment). Use [VNC Viewer - Remote Desktop](https://play.google.com/store/apps/details?id=com.realvnc.viewer.android) as the client.
