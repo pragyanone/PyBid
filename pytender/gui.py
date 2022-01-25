@@ -85,6 +85,7 @@ def check_status(event=None):
         jvSubFrame.grid(row=2, column=1, sticky="ew")
         jvSubFrame.columnconfigure(1, weight=3)
         jvSubFrame.columnconfigure(3, weight=2)
+
         jv_name_label.grid(row=0, column=0, sticky="e")
         jv_name_entry.grid(row=0, column=1, columnspan=3, sticky="ew")
         jv_name_entry.bind("<FocusOut>", check_status)
@@ -93,23 +94,17 @@ def check_status(event=None):
         jv_addr_entry.grid(row=1, column=1, sticky="ew")
 
         jv_repr_label.grid(row=1, column=2, sticky="e")
-
         jv_repr_entry.grid(row=1, column=3, sticky="ew")
-        jv_list_label.grid(column=1, sticky="ew")
-        jv_list_entry.grid(column=1, sticky="ew")
+
+        jv_list_label.grid(column=0, columnspan=4, sticky="ew")
+        jv_list_entry.grid(column=0, columnspan=4, sticky="ew")
         jv_list_entry.bind("<FocusOut>", remove_newlines)
+
         root.geometry("1000x600")
 
     if jv.get() == 1:
-        jv_name_label.grid_forget()
-        jv_name_entry.grid_forget()
         jv_name_entry.delete(0, tk.END)
-
-        jv_addr_label.grid_forget()
-        jv_addr_entry.grid_forget()
-
-        jv_list_label.grid_forget()
-        jv_list_entry.grid_forget()
+        jvSubFrame.grid_forget()
         root.geometry(gui_size)
 
 
@@ -130,11 +125,8 @@ def remove_newlines(event=None):
 ## Gui
 root = tk.Tk()
 root.title("PyTender")
-screen_width = root.winfo_screenwidth()
 gui_size = "1000x500"
-# root.geometry(gui_size + f"+{int(screen_width/8)}+0")
 root.geometry(gui_size + "+0+0")
-# root.resizable(False, False)
 root.columnconfigure(0, weight=1)
 root.rowconfigure(1, weight=1)
 
@@ -195,10 +187,10 @@ jv_repr_label = tk.Label(jvSubFrame, text="JV Representative", bg="Snow3")
 jv_repr_entry = tk.Entry(jvSubFrame, textvariable=v_jv_repr)
 
 jv_list_label = tk.Label(
-    firm_frame,
+    jvSubFrame,
     text="JV Partners' Details\n( JVrank; Person; Post; Company; Address; Percentage )",
 )
-jv_list_entry = tk.Text(firm_frame, height=4, wrap="word")
+jv_list_entry = tk.Text(jvSubFrame, height=4, wrap="word")
 
 
 tk.Label(contract_frame, text="Name of the Contract in short", bg="azure3").grid(
