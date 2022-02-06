@@ -2,6 +2,8 @@ import tkinter as tk
 from pathlib import Path
 import os
 import pickle
+
+from click import command
 from .classes import *
 
 
@@ -40,29 +42,35 @@ def generate_documents():
         jv_list_entry.get(1.0, "end-1c"),
     )
 
-    DbtB = declaration(*args)
-    DbtB.create_doc(24)
-    if jv.get() == 2:
-        jvAgr = jv_agr(*args)
-        jvAgr.create_doc()
-        PoA = poa(*args)
-        PoA.create_doc()
+    result, resultColor = "SUCCESS", "lime green"
+    try:
+        if large_or_small.get() == 1:
+            LoB = bid(*args)
+            LoB.create_doc()
+        elif large_or_small.get() == 2:
+            LoTB = tech(*args)
+            LoPB = price(*args)
+            LoTB.create_doc()
+            LoPB.create_doc()
+        DbtB = declaration(*args)
+        DbtB.create_doc(24)
+        if jv.get() == 2:
+            jvAgr = jv_agr(*args)
+            jvAgr.create_doc()
+            PoA = poa(*args)
+            PoA.create_doc()
+        if "pvt" not in v_firm_name.get().lower():
+            PoAself = poa_self(*args)
+            PoAself.create_doc(12)
+    except Exception as e:
+        import traceback
 
-    if large_or_small.get() == 1:
-        LoB = bid(*args)
-        LoB.create_doc()
-    elif large_or_small.get() == 2:
-        LoTB = tech(*args)
-        LoPB = price(*args)
-        LoTB.create_doc()
-        LoPB.create_doc()
+        result = "FAILED!\nCheck console\nfor error message"
+        print(traceback.format_exc())
+        resultColor = "Pink"
 
-    if "pvt" not in v_firm_name.get().lower():
-        PoAself = poa_self(*args)
-        PoAself.create_doc(12)
-
-    EndofCode = tk.Label(contract_frame, text="SUCCESS", bg="lime green")
-    EndofCode.grid(row=11, column=2, sticky="e")
+    EndofCode = tk.Label(contract_frame, text=result, bg=resultColor)
+    EndofCode.grid(row=7, column=2, rowspan=4, sticky="se")
 
 
 def check_status(event=None):
@@ -88,7 +96,6 @@ def check_status(event=None):
 
         jv_name_label.grid(row=0, column=0, sticky="e")
         jv_name_entry.grid(row=0, column=1, columnspan=3, sticky="ew")
-        jv_name_entry.bind("<FocusOut>", check_status)
 
         jv_addr_label.grid(row=1, column=0, sticky="e")
         jv_addr_entry.grid(row=1, column=1, sticky="ew")
@@ -98,7 +105,6 @@ def check_status(event=None):
 
         jv_list_label.grid(column=0, columnspan=4, sticky="ew")
         jv_list_entry.grid(column=0, columnspan=4, sticky="ew")
-        jv_list_entry.bind("<FocusOut>", remove_newlines)
 
         root.geometry("1000x600")
 
@@ -108,18 +114,30 @@ def check_status(event=None):
         root.geometry(gui_size)
 
 
-def remove_newlines(event=None):
-    spam = contract_name.get(1.0, "end-1c")
-    contract_name.delete(1.0, tk.END)
-    contract_name.insert(tk.END, spam.rstrip().replace("\n", " "))
+# def remove_newlines(event=None):
+#     spam = contract_name.get(1.0, "end-1c")
+#     contract_name.delete(1.0, tk.END)
+#     contract_name.insert(tk.END, spam.rstrip().replace("\n", " "))
 
-    spam = jv_list_entry.get(1.0, "end-1c")
-    jv_list_entry.delete(1.0, tk.END)
-    jv_list_entry.insert(tk.END, spam.rstrip())
+#     spam = jv_list_entry.get(1.0, "end-1c")
+#     jv_list_entry.delete(1.0, tk.END)
+#     jv_list_entry.insert(tk.END, spam.rstrip())
 
-    spam = to.get(1.0, "end-1c")
-    to.delete(1.0, tk.END)
-    to.insert(tk.END, spam.rstrip())
+#     spam = to.get(1.0, "end-1c")
+#     to.delete(1.0, tk.END)
+#     to.insert(tk.END, spam.rstrip())
+
+
+def prettify(w, event=None):
+    if type(w) == tk.Entry:
+        spam = w.get()
+        w.delete(0, tk.END)
+    elif type(w) == tk.Text:
+        spam = w.get(1.0, "end-1c")
+        w.delete(1.0, tk.END)
+    if w == contract_name:
+        spam = spam.replace("\n", " ")
+    w.insert(tk.END, spam.strip())
 
 
 ## Gui
@@ -176,6 +194,7 @@ tk.Radiobutton(
 ).grid(row=0, column=3, sticky="e")
 tk.Label(firm_frame, text="Firm Address", bg="Snow3").grid(row=1, sticky="e")
 firm_addr = tk.Entry(firm_frame, textvariable=v_firm_addr)
+
 firm_addr.grid(row=1, column=1, sticky="ew")
 
 jvSubFrame = tk.Frame(firm_frame, bg="Snow3")
@@ -202,7 +221,7 @@ tk.Label(contract_frame, text="Full Name of the Contract", bg="azure3").grid(
 )
 contract_name = tk.Text(contract_frame, height=5, wrap="word")
 contract_name.grid(row=1, column=1, sticky="nsew")
-contract_name.bind("<FocusOut>", remove_newlines)
+
 tk.Label(contract_frame, text="Invitation for Bid No.", bg="azure3").grid(sticky="e")
 tk.Entry(contract_frame, textvariable=IoB).grid(row=2, column=1, sticky="ew")
 tk.Label(contract_frame, text="Contract Identification No.", bg="azure3").grid(
@@ -213,7 +232,7 @@ tk.Label(contract_frame, text="To:", bg="azure3").grid(sticky="ne")
 to = tk.Text(contract_frame, height=5)
 to.insert(1.0, "The Chief of the Office,\n")
 to.grid(row=4, column=1, sticky="nsew")
-to.bind("<FocusOut>", remove_newlines)
+
 tk.Label(contract_frame, text="Bid validity period", bg="azure3").grid(sticky="e")
 tk.Entry(contract_frame, textvariable=days).grid(row=5, column=1, sticky="ew")
 tk.Radiobutton(
@@ -249,6 +268,17 @@ generateBtn = tk.Button(
 )
 generateBtn.grid(row=12, column=2, columnspan=2, padx=15, pady=15)
 generateBtn.configure(state="disabled")
+
+firm_name.bind("<FocusOut>", lambda _: prettify(firm_name))
+firm_addr.bind("<FocusOut>", lambda _: prettify(firm_addr))
+jv_name_entry.bind("<FocusOut>", lambda _: [check_status(), prettify(jv_name_entry)])
+jv_addr_entry.bind("<FocusOut>", lambda _: prettify(jv_addr_entry))
+jv_repr_entry.bind("<FocusOut>", lambda _: prettify(jv_repr_entry))
+jv_list_entry.bind("<FocusOut>", lambda _: prettify(jv_list_entry))
+contract_name.bind("<FocusOut>", lambda _: prettify(contract_name))
+loc_entry.bind("<FocusOut>", lambda _: prettify(loc_entry))
+
+to.bind("<FocusOut>", lambda _: prettify(to))
 
 try:
     firm_name.insert(0, data["FIRM"])
