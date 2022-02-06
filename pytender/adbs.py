@@ -1,3 +1,4 @@
+# 2000-2090
 bs_data = """
 30,32,31,32,31,30,30,30,29,30,29,31,
 31,31,32,31,31,31,30,29,30,29,30,30,
@@ -96,7 +97,12 @@ ad_data = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
 
 def unpackDate(date):
-    return [int(item) for item in date.split("-")]
+    try:
+        y, m, d = [int(item) for item in date.split("-")]
+    except ValueError:
+        return "Enter date in proper format: y-m-d"
+    assert 0 < m < 13, "Invalid date. Check month."
+    return (y, m, d)
 
 
 def isLeapYear(year):
@@ -105,6 +111,14 @@ def isLeapYear(year):
 
 def ad2days(ADdate):
     y, m, d = unpackDate(ADdate)
+    assert (
+        1943 < y < 2034
+        or (y == 1943 and m >= 4 and d >= 14)
+        or (y == 2034 and m <= 4 and d <= 13)
+    ), "Invalid date. Supported dates: 1943-4-14 to 2034-4-13"
+    assert (
+        isLeapYear(y) and m == 2 and 0 < d <= bs_data[(y - 2000) * 12 + m - 1] + 1
+    ) or (0 < d <= ad_data[m - 1]), "Invalid date. Check day."
     days = 0
     y -= 1
     days += int(y * 365 + y / 4 - y / 100 + y / 400)
@@ -117,6 +131,8 @@ def ad2days(ADdate):
 
 def bs2days(BSdate):
     y, m, d = unpackDate(BSdate)
+    assert 1999 < y < 2091, "Invalid date. Supported dates: 2000-1-1 to 2090-12-30."
+    assert 0 < d <= bs_data[(y - 2000) * 12 + m - 1], "Invalid date. Check day."
     days = sum(bs_data[0 : (y - 2000) * 12])
     days += sum(bs_data[(y - 2000) * 12 : (y - 2000) * 12 + m - 1])
     days += d
