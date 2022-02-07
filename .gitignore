@@ -4,3 +4,4 @@ dist
 pytender.egg-info
 gui1.py
 test.py
+adbsTest.py
