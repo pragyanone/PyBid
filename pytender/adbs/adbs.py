@@ -119,18 +119,25 @@ def ad2days(ADdate):
     y, m, d = unpackDate(ADdate)
     assert (
         adStart["y"] < y < adEnd["y"]
-        or (y == adStart["y"] and m >= adStart["m"] and d >= adStart["d"])
-        or (y == adEnd["y"] and m <= adEnd["m"] and d <= adEnd["d"])
+        or (y == adStart["y"] and m > adStart["m"])
+        or (y == adStart["y"] and m == adStart["m"] and d >= adStart["d"])
+        or (y == adEnd["y"] and m < adEnd["m"])
+        or (y == adEnd["y"] and m == adEnd["m"] and d <= adEnd["d"])
     ), f"Invalid date. Supported dates: {adStartS} to {adEndS}"
     assert (isLeapYear(y) and m == 2 and 0 < d <= ad_data[m - 1] + 1) or (
         0 < d <= ad_data[m - 1]
     ), "Invalid date. Check day."
+    yy = 1
     days = 0
-    y -= 1
-    days += int(y * 365 + y / 4 - y / 100 + y / 400)
+    while yy < y:
+        if isLeapYear(yy):
+            days += sum(ad_data) + 1
+        else:
+            days += sum(ad_data)
+        yy += 1
     days += sum(ad_data[0 : m - 1])
     days += d
-    if isLeapYear(y + 1) and m > 2:
+    if isLeapYear(y) and m > 2:
         days += 1
     return days
 
