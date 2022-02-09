@@ -33,7 +33,7 @@ tk.Label(adFrame, text="AD date").grid()
 tk.Entry(bsFrame, textvariable=bsDate).grid(padx=2)
 tk.Entry(adFrame, textvariable=adDate).grid(padx=2)
 tk.Button(bsFrame, text="Convert to AD", command=lambda: bs2adM(bsDate.get())).grid(
-    padx=10, pady=5
+    padx=5, pady=5
 )
 tk.Button(adFrame, text="Convert to BS", command=lambda: ad2bsM(adDate.get())).grid(
     padx=5, pady=5
