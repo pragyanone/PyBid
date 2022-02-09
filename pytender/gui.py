@@ -111,20 +111,6 @@ def check_status(event=None):
         root.geometry(gui_size)
 
 
-# def remove_newlines(event=None):
-#     spam = contract_name.get(1.0, "end-1c")
-#     contract_name.delete(1.0, tk.END)
-#     contract_name.insert(tk.END, spam.rstrip().replace("\n", " "))
-
-#     spam = jv_list_entry.get(1.0, "end-1c")
-#     jv_list_entry.delete(1.0, tk.END)
-#     jv_list_entry.insert(tk.END, spam.rstrip())
-
-#     spam = to.get(1.0, "end-1c")
-#     to.delete(1.0, tk.END)
-#     to.insert(tk.END, spam.rstrip())
-
-
 def prettify(w, event=None):
     if type(w) == tk.Entry:
         spam = w.get()

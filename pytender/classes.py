@@ -543,7 +543,7 @@ class poa(jv_agr):
         self.doc.add_paragraph("Dear Sir / Madam,")
         temp = self.doc.add_paragraph("We as the joint venture partners of ")
         temp.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-        temp.add_run(self.jv_name + "," + self.jv_addr).bold = True
+        temp.add_run(self.jv_name + ", " + self.jv_addr).bold = True
         temp.add_run(" hereby provide power of attorney to ")
         temp.add_run(self.jv_repr).bold = True
         temp.add_run(
