@@ -203,14 +203,43 @@ bsStartS, bsEndS, adStartS, adEndS = bsStart, bsEnd, adStart, adEnd
 bsStart, bsEnd, adStart, adEnd = makeDict(bsStart, bsEnd, adStart, adEnd)
 
 if __name__ == "__main__":
-    while True:
-        choice = input("1. AD2BS\n2. BS2AD\nq. Quit\nChoice? ")
-        if choice == "q":
-            break
-        elif not choice == "1" or choice == "2":
-            print("Invalid Choice")
-        date = input("Date: ")
-        if choice == "1":
-            print(f"BS Date: {ad2bs(date)}")
-        elif choice == "2":
-            print(f"AD Date: {bs2ad(date)}")
+    import sys
+
+    if len(sys.argv) > 1 and sys.argv[1] == "--test":
+        from datetime import datetime
+
+        print("Testing for dates since 1943-4-14")
+        print("=================================")
+        t = datetime.now()
+        try:
+            interval = int(sys.argv[2])
+        except:
+            interval = 91
+        dateList = [
+            days2ad(date)
+            for date in range(
+                ad2days(adStartS),
+                ad2days(datetime.now().strftime("%Y-%m-%d")),
+                interval,
+            )
+        ]
+        resultList = [bs2ad(ad2bs(date)) for date in dateList]
+        print(
+            "Took",
+            str(datetime.now() - t),
+            f"for dates in interval of {interval} days.",
+        )
+        print(dateList == resultList)
+
+    else:
+        while True:
+            choice = input("1. AD2BS\n2. BS2AD\nq. Quit\nChoice? ")
+            if choice == "q":
+                break
+            elif not (choice == "1" or choice == "2"):
+                print("Invalid Choice")
+            date = input("Date: ")
+            if choice == "1":
+                print(f"BS Date: {ad2bs(date)}")
+            elif choice == "2":
+                print(f"AD Date: {bs2ad(date)}")
