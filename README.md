@@ -2,9 +2,10 @@
 # PyTender
 
 ## Installation
-```
-pip install pytender
-```
+Download the executable from the [Releases Page](https://github.com/pragyanone/pytender/releases)
+
+Or, `pip install pytender`
+
 *If you are on windows and don't have `lxml` (dependency of python-docx), download the appropriate [lxml.whl](https://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml) file and use `pip` to install it.*
 
 [Install on Android *(useful for tablets)*](#install-on-android)
@@ -13,7 +14,6 @@ pip install pytender
 ```
 python -m pytender.pytender
 ```
-Or, create an executable by `pyinstaller -F -w --add-data "PyTender-format.docx;." pytender.py`
 
 Then provide the details of the contract.
 Documents will be created in the *'SOURCE'* sub-directory of the corresponding *project* directory.
