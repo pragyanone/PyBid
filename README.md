@@ -11,7 +11,7 @@ pip install pytender
 
 ## Usage
 ```
-python -m pytender.gui
+python -m pytender.pytender
 ```
 Then provide the details of the contract.
 Documents will be created in the *'SOURCE'* sub-directory of the corresponding *project* directory.
