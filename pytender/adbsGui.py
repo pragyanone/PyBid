@@ -1,5 +1,5 @@
 import tkinter as tk
-from adbs import ad2bs, bs2ad
+from .adbs import ad2bs, bs2ad
 
 
 def bs2adM(date):
