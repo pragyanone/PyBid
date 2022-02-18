@@ -186,11 +186,11 @@ def days2bs(days):
 
 
 def ad2bs(date):
-    return days2bs(ad2days(date) - ad2days(adStartS) + 1)
+    return days2bs(ad2days(date) - (ad2days(adStartS) - 1))
 
 
 def bs2ad(date):
-    return days2ad(bs2days(date) + ad2days(adStartS) - 1)
+    return days2ad(bs2days(date) + (ad2days(adStartS) - 1))
 
 
 def makeDict(*dates):
@@ -210,7 +210,6 @@ if __name__ == "__main__":
 
         print("Testing for dates since 1943-4-14")
         print("=================================")
-        t = datetime.now()
         try:
             interval = int(sys.argv[2])
         except:
@@ -223,11 +222,12 @@ if __name__ == "__main__":
                 interval,
             )
         ]
+        t = datetime.now()
         resultList = [bs2ad(ad2bs(date)) for date in dateList]
         print(
             "Took",
             str(datetime.now() - t),
-            f"for dates in interval of {interval} days.",
+            f"for dates in interval of {interval} day(s).",
         )
         print(dateList == resultList)
 
