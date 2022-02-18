@@ -13,6 +13,8 @@ pip install pytender
 ```
 python -m pytender.pytender
 ```
+Or, create an executable by `pyinstaller -F -w --add-data "PyTender-format.docx;." pytender.py`
+
 Then provide the details of the contract.
 Documents will be created in the *'SOURCE'* sub-directory of the corresponding *project* directory.
 
