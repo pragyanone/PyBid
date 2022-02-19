@@ -35,7 +35,7 @@ echo \"Launching PyTender in vnc-server...\";
 echo \"Select Termux in vnc-viewer\";
 sleep 3;
 am start --user 0 com.realvnc.viewer.android/com.realvnc.viewer.android.app.ConnectionChooserActivity >/dev/null;
-python -m pytender.gui'
+python -m pytender.pytender'
 " >> ../usr/etc/bash.bashrc
 ```
 7. Restart Termux
