@@ -2,9 +2,9 @@
 # PyTender
 
 ## Installation
-Download the executable from the [Releases Page](https://github.com/pragyanone/pytender/releases)
+Download the executable from the [Releases Page](https://github.com/pragyanone/pytender/releases).
 
-Or, `pip install pytender`
+Or, `pip install pytender`.
 
 *If you are on windows and don't have `lxml` (dependency of python-docx), download the appropriate [lxml.whl](https://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml) file and use `pip` to install it.*
 
