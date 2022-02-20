@@ -44,4 +44,4 @@ python -m pytender.pytender'
 [![PyTender on Android](https://github.com/pragyanone/pytender/blob/master/blob/Thumbnail.png)](https://www.youtube.com/watch?v=CQXYXuep1N4 "PyTender Installation on Android")
 
 ## License
-Not licensed.
+This project falls under the GNU General Public License v3.0.
