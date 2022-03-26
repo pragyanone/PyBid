@@ -1,5 +1,6 @@
 
 # PyTender
+Prepare [Bolpatra (PPMO)](https://www.bolpatra.gov.np/egp/) bid documents of 'Works' category
 
 ## Installation
 Download the executable from the [Releases Page](https://github.com/pragyanone/pytender/releases).
