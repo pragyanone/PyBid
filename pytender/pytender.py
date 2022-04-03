@@ -67,7 +67,7 @@ def generate_documents():
         resultColor = "Pink"
 
     EndofCode = tk.Label(contract_frame, text=result, bg=resultColor)
-    EndofCode.grid(row=7, column=2, rowspan=4, sticky="se")
+    EndofCode.grid(row=7, column=2, rowspan=4, padx=20, sticky="nsew")
 
 
 def check_status(event=None):
