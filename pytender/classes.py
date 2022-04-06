@@ -83,7 +83,7 @@ class letter:
         return p
 
     def write_signature(self):
-        signature = self.doc.add_paragraph("\n\nName: ")
+        signature = self.doc.add_paragraph("\nName: ")
         if self.jv == 1:
             signature.add_run(self.person.rstrip()).bold = True
         elif self.jv == 2:
