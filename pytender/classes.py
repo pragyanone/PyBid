@@ -83,7 +83,7 @@ class letter:
         return p
 
     def write_signature(self):
-        signature = self.doc.add_paragraph("\nName: ")
+        signature = self.doc.add_paragraph("Name: ")
         if self.jv == 1:
             signature.add_run(self.person.rstrip()).bold = True
         elif self.jv == 2:
@@ -147,7 +147,7 @@ class tech(letter):
             "We are not participating, as a Bidder or as a subcontractor, in more than one Bid in this bidding process in accordance with ITB 4.3(e), other than alternative offers submitted in accordance with ITB 13."
         )
         self.add_line(
-            "Our firm, its affiliates or subsidiaries, including any Subcontractors or Suppliers for any part of the contract, has not been declared ineligible by DP, under the Employers country laws or official regulations or by an act of compliance with a decision of the United Nations Security Council;"
+            "Our firm, its affiliates or subsidiaries, including any Subcontractors or Suppliers for any part of the contract, has not been declared ineligible by DP, under the Employer's country laws or official regulations or by an act of compliance with a decision of the United Nations Security Council;"
         )
         self.add_line("We are not a government owned entity.")
         self.add_line(
@@ -169,6 +169,9 @@ class tech(letter):
         credit.add_run(self.line_of_cr).bold = True
         credit.add_run(
             " at the time of contract agreement, if the bid is awarded to us."
+        )
+        self.add_line(
+            "We declare that we have not participated in more than five (5) bidding process since 2078-12-03 i.e. March 17, 2022 in accordance with ITB 4.9;"
         )
 
 
@@ -193,7 +196,7 @@ class price(letter):
             "The total price of our Bid, excluding any discounts offered in item (d) below is: NRs.……………………………; or when left blank is the Bid Price indicated in the Bill of Quantities."
         )
         self.add_line(
-            "The discounts offered and the methodology for their application are:………………………………"
+            "The discounts offered and the methodology for their application for subject contract are:………………………………"
         )
 
         itb_18_1 = self.add_line("Our bid shall be valid for a period of ")
@@ -263,7 +266,7 @@ class bid(letter):
             "The total price of our Bid, excluding any discounts offered in item (d) below is: NRs.……………………………; or when left blank is the Bid Price indicated in the Bill of Quantities."
         )
         self.add_line(
-            "The discounts offered and the methodology for their application are:………………………………"
+            "The discounts offered and the methodology for their application for subject contract are:………………………………"
         )
 
         itb_18_1 = self.add_line("Our bid shall be valid for a period of ")
@@ -282,10 +285,10 @@ class bid(letter):
             "We, including any subcontractors or suppliers for any part of the contract, do not have any conflict of interest in accordance with ITB 4.3;"
         )
         self.add_line(
-            "We are not participating, as a Bidder or as a subcontractor, in more than one Bid in this bidding process in accordance with ITB 4.3, other than alternative offers submitted in accordance with ITB 13."
+            "We are not participating, as a Bidder or as a subcontractor, in more than one Bid in this bidding process in accordance with ITB 4.3;"
         )
         self.add_line(
-            "Our firm, its affiliates or subsidiaries, including any Subcontractors or Suppliers for any part of the contract, has not been declared ineligible by DP, under the Employers country laws or official regulations or by an act of compliance with a decision of the United Nations Security Council;"
+            "Our firm, its affiliates or subsidiaries, including any Subcontractors or Suppliers for any part of the contract, has not been declared ineligible, under the Employer's country laws or official regulations or by an act of compliance with a decision of the United Nations Security Council;"
         )
         self.add_line("We are not a government owned entity;")
         self.add_line(
@@ -295,11 +298,14 @@ class bid(letter):
             "We declare that, we have not been black listed as per ITB 3.4 and no conflict of interest in the proposed procurement proceedings and we have not been punished for an offense relating to the concerned profession or business."
         )
         self.add_line(
+            "We declare that we have not participated in more than five (5) bidding process since 2078-12-03 i.e. March 17, 2022 in accordance with ITB 4.8;"
+        )
+        self.add_line(
             "We understand that you are not bound to accept the lowest evaluated bid or any other bid that you may receive; and"
         )
 
         award = self.add_line(
-            "If awarded the contract, the person named below shall act as Contractor‘s Representative: "
+            "If awarded the contract, the person named below shall act as Contractor's Representative: "
         )
         award.add_run(self.person).bold = True
 
