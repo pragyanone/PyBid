@@ -42,3 +42,12 @@ if __name__ == "__main__":
         print("\n")
         for j in range(10):
             print(num2words(str(i + j)), end="\t")
+
+
+def ordinal(num):
+    ordinals = {
+        "1": "First",
+        "2": "Second",
+        "3": "Third",
+    }
+    return ordinals[num]

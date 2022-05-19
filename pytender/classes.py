@@ -1,7 +1,7 @@
 from docx import Document
 from docx.shared import Inches, Pt, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from .num2words import num2words
+from .num2words import num2words, ordinal
 import os
 
 
@@ -404,8 +404,12 @@ class jv_agr(letter):
 
             if partner[0] == "1":
                 temp.add_run(' (hereinafter called the "Partner-In-Charge")')
-            elif partner[0] == str(len(self.jvList)):
-                temp.add_run(' (hereinafter called the "Second Partner(s)")')
+            else:
+                temp.add_run(
+                    f' (hereinafter called the "{ordinal(partner[0])} Partner")'
+                )
+            # elif partner[0] == str(len(self.jvList)):
+            #     temp.add_run(' (hereinafter called the "Second Partner(s)")')
 
             if partner[0] == str(len(self.jvList) - 1):
                 temp.add_run(" and ")
@@ -464,7 +468,7 @@ class jv_agr(letter):
         )
         for partner in self.jvList:
             temp.add_run(
-                partner[3] + "-" + partner[5] + "% [" + num2words(partner[5]) + "]"
+                partner[3] + " - " + partner[5] + "% [" + num2words(partner[5]) + "]"
             ).bold = True
             if partner[0] == str(len(self.jvList) - 1):
                 temp.add_run(" and ")
@@ -512,7 +516,7 @@ class jv_agr(letter):
         table.style = "CenteredTable"
         for i, partner in enumerate(self.jvList):
             if i > 0:
-                table.rows[0].cells[i].text = "Secondary Partner"
+                table.rows[0].cells[i].text = f"{ordinal(partner[0])} Partner"
             else:
                 table.rows[0].cells[i].text = "Partner-In-Charge"
 
