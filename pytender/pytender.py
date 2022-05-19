@@ -8,55 +8,70 @@ settings_path = os.path.join(os.path.dirname(__file__), "PyTender-settings.pkl")
 
 
 def generate_documents():
-    D = {
-        "FIRM": v_firm_name.get(),
-        "FIRM_ADDR": v_firm_addr.get(),
-        "PERSON": person.get(),
+    details = {
+        "FIRM": firm_name.get(),
+        "FIRM_ADDR": firm_addr.get(),
+        "PERSON": auth_person.get(),
+    }
+    previous_data = {
+        "SHORT_NAME": short_name.get(),
+        "FULL_NAME": full_name_text.get(1.0, "end-1c"),
+        "IOB": IoB.get(),
+        "CONTRACT_ID": contract_ID.get(),
+        "TO": to_text.get(1.0, "end-1c"),
+        "BID_VALIDITY_PERIOD": bid_validity_period.get(),
+        "LOC": loc.get(),
+        "AUTH_PERSON": auth_person.get(),
+        "DATE": date.get(),
+        "JV_NAME": jv_name.get(),
+        "JV_ADDR": jv_addr.get(),
+        "JV_REPR": jv_repr.get(),
+        "JV_LIST": jv_list_text.get(1.0, "end-1c"),
     }
     settings = open(settings_path, "wb")
-    pickle.dump(D, settings)
+    pickle.dump((details, previous_data), settings)
 
     global path
     path = os.path.join(short_name.get(), "SOURCE")
     Path(path).mkdir(parents=True, exist_ok=True)
     args = (
         path,
-        v_firm_name.get(),
-        v_firm_addr.get(),
-        v_jv_name.get(),
-        v_jv_addr.get(),
-        v_jv_repr.get(),
-        jv.get(),
+        firm_name.get(),
+        firm_addr.get(),
+        jv_name.get(),
+        jv_addr.get(),
+        jv_repr.get(),
+        small_or_large.get(),
         short_name.get(),
-        contract_name.get(1.0, "end-1c"),
+        full_name_text.get(1.0, "end-1c"),
         IoB.get(),
-        Contract_ID.get(),
-        to.get(1.0, "end-1c"),
-        days.get(),
-        line_of_cr.get(),
-        person.get().rstrip(),
+        contract_ID.get(),
+        to_text.get(1.0, "end-1c"),
+        bid_validity_period.get(),
+        loc.get(),
+        auth_person.get().rstrip(),
         date.get(),
-        jv_list_entry.get(1.0, "end-1c"),
+        jv_list_text.get(1.0, "end-1c"),
     )
 
     result, resultColor = "SUCCESS", "lime green"
     try:
-        if large_or_small.get() == 1:
+        if small_or_large.get() == 1:
             LoB = bid(*args)
             LoB.create_doc()
-        elif large_or_small.get() == 2:
+        elif small_or_large.get() == 2:
             LoTB = tech(*args)
             LoPB = price(*args)
             LoTB.create_doc()
             LoPB.create_doc()
         DbtB = declaration(*args)
         DbtB.create_doc(24)
-        if jv.get() == 2:
+        if single_or_jv.get() == 2:
             jvAgr = jv_agr(*args)
             jvAgr.create_doc()
             PoA = poa(*args)
             PoA.create_doc()
-        if "pvt" not in v_firm_name.get().lower():
+        if "pvt" not in firm_name.get().lower():
             PoAself = poa_self(*args)
             PoAself.create_doc(12)
     except Exception as e:
@@ -66,27 +81,27 @@ def generate_documents():
         print(traceback.format_exc())
         resultColor = "Pink"
 
-    EndofCode = tk.Label(contract_frame, text=result, bg=resultColor)
-    EndofCode.grid(row=7, column=2, rowspan=4, padx=20, sticky="nsew")
+    EndofCode_label = tk.Label(contract_frame, text=result, bg=resultColor)
+    EndofCode_label.grid(row=7, column=2, rowspan=4, padx=20, sticky="nsew")
 
 
 def check_status(event=None):
-    if large_or_small.get() == 2:
+    if small_or_large.get() == 2:
         loc_entry.configure(state="normal")
     else:
         loc_entry.configure(state="disabled")
 
-    if large_or_small.get():
-        if jv.get() == 1:
-            generateBtn.configure(state="normal")
+    if small_or_large.get():
+        if single_or_jv.get() == 1:
+            generate_button.configure(state="normal")
 
-        elif jv.get() == 2:
+        elif single_or_jv.get() == 2:
             if jv_name_entry.get():
-                generateBtn.configure(state="normal")
+                generate_button.configure(state="normal")
             else:
-                generateBtn.configure(state="disabled")
+                generate_button.configure(state="disabled")
 
-    if jv.get() == 2:
+    if single_or_jv.get() == 2:
         jvSubFrame.grid(row=2, column=1, sticky="ew")
         jvSubFrame.columnconfigure(1, weight=3)
         jvSubFrame.columnconfigure(3, weight=2)
@@ -101,26 +116,51 @@ def check_status(event=None):
         jv_repr_entry.grid(row=1, column=3, sticky="ew")
 
         jv_list_label.grid(column=0, columnspan=4, sticky="ew")
-        jv_list_entry.grid(column=0, columnspan=4, sticky="ew")
+        jv_list_text.grid(column=0, columnspan=4, sticky="ew")
 
         root.geometry("1000x600")
 
-    if jv.get() == 1:
+    if single_or_jv.get() == 1:
         jv_name_entry.delete(0, tk.END)
         jvSubFrame.grid_forget()
         root.geometry(gui_size)
 
 
-def prettify(w, event=None):
-    if type(w) == tk.Entry:
-        spam = w.get()
-        w.delete(0, tk.END)
-    elif type(w) == tk.Text:
-        spam = w.get(1.0, "end-1c")
-        w.delete(1.0, tk.END)
-    if w == contract_name:
+def prettify(widget, event=None):
+    if type(widget) == tk.Entry:
+        spam = widget.get()
+        widget.delete(0, tk.END)
+    elif type(widget) == tk.Text:
+        spam = widget.get(1.0, "end-1c")
+        widget.delete(1.0, tk.END)
+    if widget == full_name_text:
         spam = spam.replace("\n", " ")
-    w.insert(tk.END, spam.strip())
+    widget.insert(tk.END, spam.strip())
+
+
+def load_previous():
+    previous_data = settings[1]
+    widgets = (
+        short_name_entry,
+        full_name_text,
+        IoB_entry,
+        contract_ID_entry,
+        to_text,
+        bid_validity_period_entry,
+        loc_entry,
+        auth_person_entry,
+        date_entry,
+        jv_name_entry,
+        jv_addr_entry,
+        jv_repr_entry,
+        jv_list_text,
+    )
+    for widget, key in zip(widgets, previous_data):
+        if type(widget) == tk.Entry:
+            widget.delete(0, tk.END)
+        elif type(widget) == tk.Text:
+            widget.delete(1.0, tk.END)
+        widget.insert(tk.END, previous_data[key])
 
 
 ## Gui
@@ -131,25 +171,24 @@ root.geometry(gui_size + "+0+0")
 root.columnconfigure(0, weight=1)
 root.rowconfigure(1, weight=1)
 
-v_firm_name = tk.StringVar()
-v_jv_name = tk.StringVar()
-v_jv_addr = tk.StringVar()
-jv = tk.IntVar()
-large_or_small = tk.IntVar()
-v_firm_addr = tk.StringVar()
+firm_name = tk.StringVar()
+firm_addr = tk.StringVar()
+single_or_jv = tk.IntVar()
 short_name = tk.StringVar()
 IoB = tk.StringVar()
-Contract_ID = tk.StringVar()
-days = tk.StringVar()
-person = tk.StringVar()
+contract_ID = tk.StringVar()
+bid_validity_period = tk.StringVar()
+small_or_large = tk.IntVar()
+loc = tk.StringVar()
+auth_person = tk.StringVar()
 date = tk.StringVar()
-line_of_cr = tk.StringVar()
-v_jv_repr = tk.StringVar()
-
+jv_name = tk.StringVar()
+jv_addr = tk.StringVar()
+jv_repr = tk.StringVar()
 
 try:
-    settings = open(settings_path, "rb")
-    data = pickle.load(settings)
+    settings = pickle.load(open(settings_path, "rb"))
+    details = settings[0]
 except:
     pass
 
@@ -166,116 +205,168 @@ contract_frame.rowconfigure(1, weight=1)
 contract_frame.rowconfigure(4, weight=1)
 
 
-tk.Label(firm_frame, text="Firm Name", bg="Snow3").grid(sticky="e")
-firm_name = tk.Entry(firm_frame, textvariable=v_firm_name)
-firm_name.grid(row=0, column=1, sticky="ew")
-tk.Radiobutton(
-    firm_frame, text="Single", variable=jv, value=1, command=check_status, bg="Snow3"
-).grid(row=0, column=2, sticky="e")
-tk.Radiobutton(
-    firm_frame, text="JV", variable=jv, value=2, command=check_status, bg="Snow3"
-).grid(row=0, column=3, sticky="e")
-tk.Label(firm_frame, text="Firm Address", bg="Snow3").grid(row=1, sticky="e")
-firm_addr = tk.Entry(firm_frame, textvariable=v_firm_addr)
+firm_name_label = tk.Label(firm_frame, text="Firm Name", bg="Snow3")
+firm_name_label.grid(sticky="e")
 
-firm_addr.grid(row=1, column=1, sticky="ew")
+firm_name_entry = tk.Entry(firm_frame, textvariable=firm_name)
+firm_name_entry.grid(row=0, column=1, sticky="ew")
+
+single_radio = tk.Radiobutton(
+    firm_frame,
+    text="Single",
+    variable=single_or_jv,
+    value=1,
+    command=check_status,
+    bg="Snow3",
+)
+single_radio.grid(row=0, column=2, sticky="e")
+
+jv_radio = tk.Radiobutton(
+    firm_frame,
+    text="JV",
+    variable=single_or_jv,
+    value=2,
+    command=check_status,
+    bg="Snow3",
+)
+jv_radio.grid(row=0, column=3, sticky="e")
+
+firm_addr_label = tk.Label(firm_frame, text="Firm Address", bg="Snow3")
+firm_addr_label.grid(row=1, sticky="e")
+
+firm_addr_entry = tk.Entry(firm_frame, textvariable=firm_addr)
+firm_addr_entry.grid(row=1, column=1, sticky="ew")
+
 
 jvSubFrame = tk.Frame(firm_frame, bg="Snow3")
-jv_name_label = tk.Label(jvSubFrame, text="JV Name", bg="Snow3")
-jv_name_entry = tk.Entry(jvSubFrame, textvariable=v_jv_name)
-jv_addr_label = tk.Label(jvSubFrame, text="JV Address", bg="Snow3")
-jv_addr_entry = tk.Entry(jvSubFrame, textvariable=v_jv_addr)
-jv_repr_label = tk.Label(jvSubFrame, text="JV Representative", bg="Snow3")
-jv_repr_entry = tk.Entry(jvSubFrame, textvariable=v_jv_repr)
 
+jv_name_label = tk.Label(jvSubFrame, text="JV Name", bg="Snow3")
+jv_name_entry = tk.Entry(jvSubFrame, textvariable=jv_name)
+jv_addr_label = tk.Label(jvSubFrame, text="JV Address", bg="Snow3")
+jv_addr_entry = tk.Entry(jvSubFrame, textvariable=jv_addr)
+jv_repr_label = tk.Label(jvSubFrame, text="JV Representative", bg="Snow3")
+jv_repr_entry = tk.Entry(jvSubFrame, textvariable=jv_repr)
 jv_list_label = tk.Label(
     jvSubFrame,
-    text="JV Partners' Details\n( JVrank; Person; Post; Company; Address; Percentage )",
+    text="JV Partners' Details\n( JVrank; Authorized Person; Post; Company; Address; Percentage )",
 )
-jv_list_entry = tk.Text(jvSubFrame, height=4, wrap="word")
+jv_list_text = tk.Text(jvSubFrame, height=4, wrap="word")
 
 
-tk.Label(contract_frame, text="Name of the Contract in short", bg="azure3").grid(
-    sticky="e"
+short_name_label = tk.Label(
+    contract_frame, text="Name of the Contract in short", bg="azure3"
 )
-tk.Entry(contract_frame, textvariable=short_name).grid(row=0, column=1, sticky="ew")
-tk.Label(contract_frame, text="Full Name of the Contract", bg="azure3").grid(
-    sticky="ne"
-)
-contract_name = tk.Text(contract_frame, height=5, wrap="word")
-contract_name.grid(row=1, column=1, sticky="nsew")
+short_name_label.grid(sticky="e")
 
-tk.Label(contract_frame, text="Invitation for Bid No.", bg="azure3").grid(sticky="e")
-tk.Entry(contract_frame, textvariable=IoB).grid(row=2, column=1, sticky="ew")
-tk.Label(contract_frame, text="Contract Identification No.", bg="azure3").grid(
-    sticky="e"
-)
-tk.Entry(contract_frame, textvariable=Contract_ID).grid(row=3, column=1, sticky="ew")
-tk.Label(contract_frame, text="To:", bg="azure3").grid(sticky="ne")
-to = tk.Text(contract_frame, height=5)
-to.insert(1.0, "The Chief of the Office,\n")
-to.grid(row=4, column=1, sticky="nsew")
+short_name_entry = tk.Entry(contract_frame, textvariable=short_name)
+short_name_entry.grid(row=0, column=1, sticky="ew")
 
-tk.Label(contract_frame, text="Bid validity period", bg="azure3").grid(sticky="e")
-tk.Entry(contract_frame, textvariable=days).grid(row=5, column=1, sticky="ew")
-tk.Radiobutton(
+full_name_label = tk.Label(
+    contract_frame, text="Full Name of the Contract", bg="azure3"
+)
+full_name_label.grid(sticky="ne")
+
+full_name_text = tk.Text(contract_frame, height=5, wrap="word")
+full_name_text.grid(row=1, column=1, sticky="nsew")
+
+IoB_label = tk.Label(contract_frame, text="Invitation for Bid No.", bg="azure3")
+IoB_label.grid(sticky="e")
+
+IoB_entry = tk.Entry(contract_frame, textvariable=IoB)
+IoB_entry.grid(row=2, column=1, sticky="ew")
+
+contract_ID_label = tk.Label(
+    contract_frame, text="Contract Identification No.", bg="azure3"
+)
+contract_ID_label.grid(sticky="e")
+
+contract_ID_entry = tk.Entry(contract_frame, textvariable=contract_ID)
+contract_ID_entry.grid(row=3, column=1, sticky="ew")
+
+to_label = tk.Label(contract_frame, text="To:", bg="azure3")
+to_label.grid(sticky="ne")
+
+to_text = tk.Text(contract_frame, height=5)
+to_text.insert(1.0, "The Chief of the Office,\n")
+to_text.grid(row=4, column=1, sticky="nsew")
+
+bid_validity_period_label = tk.Label(
+    contract_frame, text="Bid validity period", bg="azure3"
+)
+bid_validity_period_label.grid(sticky="e")
+
+bid_validity_period_entry = tk.Entry(contract_frame, textvariable=bid_validity_period)
+bid_validity_period_entry.grid(row=5, column=1, sticky="ew")
+
+small_radio = tk.Radiobutton(
     contract_frame,
     text="Letter of Bid",
-    variable=large_or_small,
+    variable=small_or_large,
     value=1,
     command=check_status,
     bg="azure3",
-).grid(row=6, column=1, sticky="w")
-tk.Radiobutton(
+)
+small_radio.grid(row=6, column=1, sticky="w")
+
+large_radio = tk.Radiobutton(
     contract_frame,
     text="Letter of Technical Bid & Letter of Price Bid",
-    variable=large_or_small,
+    variable=small_or_large,
     value=2,
     command=check_status,
     bg="azure3",
-).grid(row=7, column=1, sticky="w")
-tk.Label(contract_frame, text="Line of Credit", bg="azure3").grid(sticky="e")
-loc_entry = tk.Entry(contract_frame, textvariable=line_of_cr)
+)
+large_radio.grid(row=7, column=1, sticky="w")
+
+loc_label = tk.Label(contract_frame, text="Line of Credit", bg="azure3")
+loc_label.grid(sticky="e")
+
+loc_entry = tk.Entry(contract_frame, textvariable=loc)
 loc_entry.configure(state="disabled")
 loc_entry.grid(row=8, column=1, sticky="ew")
-tk.Label(contract_frame, text="Authorized Person", bg="azure3").grid(
-    row=11, column=0, sticky="e"
-)
-auth_person = tk.Entry(contract_frame, textvariable=person)
-auth_person.grid(row=11, column=1, sticky="ew")
-tk.Label(contract_frame, text="Date", bg="azure3").grid(row=12, column=0, sticky="e")
-tk.Entry(contract_frame, textvariable=date).grid(row=12, column=1, sticky="ew")
 
-generateBtn = tk.Button(
+auth_person_label = tk.Label(contract_frame, text="Authorized Person", bg="azure3")
+auth_person_label.grid(row=11, column=0, sticky="e")
+
+auth_person_entry = tk.Entry(contract_frame, textvariable=auth_person)
+auth_person_entry.grid(row=11, column=1, sticky="ew")
+
+date_label = tk.Label(contract_frame, text="Date", bg="azure3")
+date_label.grid(row=12, column=0, sticky="e")
+
+date_entry = tk.Entry(contract_frame, textvariable=date)
+date_entry.grid(row=12, column=1, sticky="ew")
+
+load_previous_button = tk.Button(
+    contract_frame, text="Load Previous Data", command=load_previous
+)
+load_previous_button.grid(row=1, column=2, columnspan=2, padx=15, pady=15)
+
+generate_button = tk.Button(
     contract_frame, text="Generate Documents", command=generate_documents
 )
-generateBtn.grid(row=12, column=2, columnspan=2, padx=15, pady=15)
-generateBtn.configure(state="disabled")
+generate_button.grid(row=12, column=2, columnspan=2, padx=15, pady=15)
+generate_button.configure(state="disabled")
 
-firm_name.bind("<FocusOut>", lambda _: prettify(firm_name))
-firm_addr.bind("<FocusOut>", lambda _: prettify(firm_addr))
+firm_name_entry.bind("<FocusOut>", lambda _: prettify(firm_name_entry))
+firm_addr_entry.bind("<FocusOut>", lambda _: prettify(firm_addr_entry))
 jv_name_entry.bind("<FocusOut>", lambda _: [check_status(), prettify(jv_name_entry)])
 jv_addr_entry.bind("<FocusOut>", lambda _: prettify(jv_addr_entry))
 jv_repr_entry.bind("<FocusOut>", lambda _: prettify(jv_repr_entry))
-jv_list_entry.bind("<FocusOut>", lambda _: prettify(jv_list_entry))
-contract_name.bind("<FocusOut>", lambda _: prettify(contract_name))
+jv_list_text.bind("<FocusOut>", lambda _: prettify(jv_list_text))
+full_name_text.bind("<FocusOut>", lambda _: prettify(full_name_text))
 loc_entry.bind("<FocusOut>", lambda _: prettify(loc_entry))
+to_text.bind("<FocusOut>", lambda _: prettify(to_text))
 
-to.bind("<FocusOut>", lambda _: prettify(to))
-
-try:
-    firm_name.insert(0, data["FIRM"])
-    firm_addr.insert(0, data["FIRM_ADDR"])
-    auth_person.insert(0, data["PERSON"])
-    designation = "Managing Director" if "pvt" in data["FIRM"].lower() else "Proprietor"
-    jv_list_entry.insert(
-        tk.END,
-        f"2; {data['PERSON']}; {designation}; {data['FIRM']}; {data['FIRM_ADDR']}; 50",
-    )
-    jv_addr_entry.insert(0, data["FIRM_ADDR"])
-    jv_repr_entry.insert(0, data["PERSON"])
-
-except:
-    pass
+designation = "Managing Director" if "pvt" in details["FIRM"].lower() else "Proprietor"
+firm_name_entry.insert(tk.END, details["FIRM"])
+firm_addr_entry.insert(tk.END, details["FIRM_ADDR"])
+auth_person_entry.insert(tk.END, details["PERSON"])
+jv_list_text.insert(
+    tk.END,
+    f"2; {details['PERSON']}; {designation}; {details['FIRM']}; {details['FIRM_ADDR']}; 50",
+)
+jv_addr_entry.insert(tk.END, details["FIRM_ADDR"])
+jv_repr_entry.insert(tk.END, details["PERSON"])
 
 root.mainloop()
