@@ -12,6 +12,7 @@ def generate_documents():
         "FIRM": firm_name.get(),
         "FIRM_ADDR": firm_addr.get(),
         "PERSON": auth_person.get(),
+        "DESIGNATION": auth_person_designation.get(),
     }
     previous_data = {
         "SHORT_NAME": short_name.get(),
@@ -21,7 +22,6 @@ def generate_documents():
         "TO": to_text.get(1.0, "end-1c"),
         "BID_VALIDITY_PERIOD": bid_validity_period.get(),
         "LOC": loc.get(),
-        "AUTH_PERSON": auth_person.get(),
         "DATE": date.get(),
         "JV_NAME": jv_name.get(),
         "JV_ADDR": jv_addr.get(),
@@ -41,7 +41,7 @@ def generate_documents():
         jv_name.get(),
         jv_addr.get(),
         jv_repr.get(),
-        small_or_large.get(),
+        single_or_jv.get(),
         short_name.get(),
         full_name_text.get(1.0, "end-1c"),
         IoB.get(),
@@ -50,6 +50,7 @@ def generate_documents():
         bid_validity_period.get(),
         loc.get(),
         auth_person.get().rstrip(),
+        auth_person_designation.get(),
         date.get(),
         jv_list_text.get(1.0, "end-1c"),
     )
@@ -148,7 +149,6 @@ def load_previous():
         to_text,
         bid_validity_period_entry,
         loc_entry,
-        auth_person_entry,
         date_entry,
         jv_name_entry,
         jv_addr_entry,
@@ -181,6 +181,7 @@ bid_validity_period = tk.StringVar()
 small_or_large = tk.IntVar()
 loc = tk.StringVar()
 auth_person = tk.StringVar()
+auth_person_designation = tk.StringVar()
 date = tk.StringVar()
 jv_name = tk.StringVar()
 jv_addr = tk.StringVar()
@@ -328,8 +329,23 @@ loc_entry.grid(row=8, column=1, sticky="ew")
 auth_person_label = tk.Label(contract_frame, text="Authorized Person", bg="azure3")
 auth_person_label.grid(row=11, column=0, sticky="e")
 
-auth_person_entry = tk.Entry(contract_frame, textvariable=auth_person)
-auth_person_entry.grid(row=11, column=1, sticky="ew")
+auth_person_frame = tk.Frame(contract_frame)
+auth_person_frame.grid(row=11, column=1, sticky="ew")
+auth_person_frame.columnconfigure(0, weight=1)
+auth_person_frame.columnconfigure(2, weight=1)
+
+auth_person_entry = tk.Entry(auth_person_frame, textvariable=auth_person)
+auth_person_entry.grid(sticky="ew")
+
+auth_person_designation_label = tk.Label(
+    auth_person_frame, text="Designation", bg="azure3"
+)
+auth_person_designation_label.grid(row=0, column=1)
+
+auth_person_designation_entry = tk.Entry(
+    auth_person_frame, textvariable=auth_person_designation
+)
+auth_person_designation_entry.grid(row=0, column=2, sticky="ew")
 
 date_label = tk.Label(contract_frame, text="Date", bg="azure3")
 date_label.grid(row=12, column=0, sticky="e")
@@ -358,15 +374,22 @@ full_name_text.bind("<FocusOut>", lambda _: prettify(full_name_text))
 loc_entry.bind("<FocusOut>", lambda _: prettify(loc_entry))
 to_text.bind("<FocusOut>", lambda _: prettify(to_text))
 
-designation = "Managing Director" if "pvt" in details["FIRM"].lower() else "Proprietor"
-firm_name_entry.insert(tk.END, details["FIRM"])
-firm_addr_entry.insert(tk.END, details["FIRM_ADDR"])
-auth_person_entry.insert(tk.END, details["PERSON"])
-jv_list_text.insert(
-    tk.END,
-    f"2; {details['PERSON']}; {designation}; {details['FIRM']}; {details['FIRM_ADDR']}; 50",
-)
-jv_addr_entry.insert(tk.END, details["FIRM_ADDR"])
-jv_repr_entry.insert(tk.END, details["PERSON"])
+try:
+    # designation = (
+    #    "Managing Director" if "pvt" in details["FIRM"].lower() else "Proprietor"
+    # )
+
+    firm_name_entry.insert(tk.END, details["FIRM"])
+    firm_addr_entry.insert(tk.END, details["FIRM_ADDR"])
+    auth_person_entry.insert(tk.END, details["PERSON"])
+    auth_person_designation_entry.insert(tk.END, details["DESIGNATION"])
+    jv_list_text.insert(
+        tk.END,
+        f"2; {details['PERSON']}; {details['DESIGNATION']}; {details['FIRM']}; {details['FIRM_ADDR']}; 50",
+    )
+    jv_addr_entry.insert(tk.END, details["FIRM_ADDR"])
+    jv_repr_entry.insert(tk.END, details["PERSON"])
+except:
+    pass
 
 root.mainloop()

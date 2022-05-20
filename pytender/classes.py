@@ -23,6 +23,7 @@ class letter:
         days,
         line_of_cr,
         person,
+        designation,
         date,
         jvList,
     ):
@@ -41,6 +42,7 @@ class letter:
         self.days = days
         self.line_of_cr = line_of_cr
         self.person = person
+        self.designation = designation
         self.date = date
         self.jvList = jvList
 
@@ -50,9 +52,9 @@ class letter:
         path_to_module = os.path.dirname(__file__)
         format_path = os.path.join(path_to_module, "PyTender-format.docx")
         self.doc = Document(format_path)
-        self.designation = (
-            "Managing Director" if "pvt" in self.firm_name.lower() else "Proprietor"
-        )
+        # self.designation = (
+        #    "Managing Director" if "pvt" in self.firm_name.lower() else "Proprietor"
+        # )
 
     def write_title(self, size=16):
         title = self.doc.add_paragraph("\n\n")
