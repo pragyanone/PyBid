@@ -4,9 +4,9 @@ from pathlib import Path
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 setup(
-    name="pytender",
-    packages=["pytender"],
-    package_data={"": ["PyTender-format.docx", "gui.pyw", "classes.py"]},
+    name="PyBid",
+    packages=["PyBid"],
+    package_data={"": ["PyBid-format.docx", "gui.pyw", "classes.py"]},
     # include_package_data=True,
     version="1.7",  # Start with a small number and increase it with every change you make
     license="MIT License",
@@ -16,7 +16,7 @@ setup(
     author="Pragyan Shrestha",
     author_email="pragyanOne@gmail.com",
     url="https://github.com/pragyanone/tender",
-    download_url="https://github.com/pragyanone/pytender/archive/refs/tags/1.7.tar.gz",
+    download_url="https://github.com/pragyanone/PyBid/archive/refs/tags/1.7.tar.gz",
     keywords=[
         "ppmo",
         "bid",

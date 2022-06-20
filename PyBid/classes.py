@@ -50,7 +50,7 @@ class letter:
         self.jvList.sort()
 
         path_to_module = os.path.dirname(__file__)
-        format_path = os.path.join(path_to_module, "PyTender-format.docx")
+        format_path = os.path.join(path_to_module, "PyBid-format.docx")
         self.doc = Document(format_path)
         # self.designation = (
         #    "Managing Director" if "pvt" in self.firm_name.lower() else "Proprietor"

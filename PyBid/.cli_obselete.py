@@ -4,7 +4,7 @@ import pickle
 from .classes import *
 
 
-settings_path = os.path.join(os.path.dirname(__file__), 'PyTender-settings.pkl')
+settings_path = os.path.join(os.path.dirname(__file__), 'PyBid-settings.pkl')
 D = {'FIRM':v_firm_name.get(), 'FIRM_ADDR':v_firm_addr.get(), 'PERSON':person.get()}
 settings = open(settings_path, 'wb')
 pickle.dump(D, settings)

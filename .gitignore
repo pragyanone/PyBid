@@ -1,7 +1,7 @@
 *.pkl
 __pycache__
 dist
-pytender.egg-info
+PyBid.egg-info
 gui1.py
 test.py
 adbsTest.py

@@ -4,7 +4,7 @@ import os
 import pickle
 from .classes import *
 
-settings_path = os.path.join(os.path.dirname(__file__), "PyTender-settings.pkl")
+settings_path = os.path.join(os.path.dirname(__file__), "PyBid-settings.pkl")
 
 
 def generate_documents():
@@ -165,7 +165,7 @@ def load_previous():
 
 ## Gui
 root = tk.Tk()
-root.title("PyTender")
+root.title("PyBid")
 gui_size = "1000x500"
 root.geometry(gui_size + "+0+0")
 root.columnconfigure(0, weight=1)
