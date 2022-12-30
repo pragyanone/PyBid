@@ -49,19 +49,25 @@ class letter:
         self.jvList = [line.split("; ") for line in self.jvList.split("\n")]
         self.jvList.sort()
 
-        path_to_module = os.path.dirname(__file__)
-        format_path = os.path.join(path_to_module, "PyBid-format.docx")
-        self.doc = Document(format_path)
-        # self.designation = (
-        #    "Managing Director" if "pvt" in self.firm_name.lower() else "Proprietor"
-        # )
+        self.path_to_module = os.path.dirname(__file__)
+        self.format_path = os.path.join(self.path_to_module, "PyBid-format.docx")
+        self.doc = Document(self.format_path)
+
+    def write_jv_head(self):
+        head = self.doc.paragraphs[0]
+        head.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = head.add_run(self.jv_name)
+        run.font.size = Pt(24)
+        head.add_run("\n" + self.jv_addr + "\n" + "=" * 60 + "\n").bold = True
 
     def write_title(self, size=16):
-        title = self.doc.add_paragraph("\n\n")
-        title.add_run(self.heading)
+        title = self.doc.paragraphs[0]
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        title.runs[1].underline = title.runs[1].bold = True
-        title.runs[1].font.size = Pt(size)
+        if self.jv == 1 or (self.jv == 2 and "Letter" not in self.heading):
+            title.add_run("\n" * 4)
+        run = title.add_run(self.heading)
+        run.underline = run.bold = True
+        run.font.size = Pt(size)
 
     def write_details(self):
         details = self.doc.add_paragraph("Date: ")
@@ -111,6 +117,8 @@ class letter:
         self.doc.save(filename)
 
     def create_doc(self):
+        if self.jv == 2:
+            self.write_jv_head()
         self.write_title()
         self.write_details()
         self.write_inside_addr()
@@ -120,12 +128,22 @@ class letter:
 
 
 class tech(letter):
-    heading = "Letter of Technical Bid"
+    def __init__(self, *args):
+        letter.__init__(self, *args)
+        self.heading = "Letter of Technical Bid"
+        if self.jv == 1:
+            try:
+                self.format_path = os.path.join(
+                    self.path_to_module, "PyBid-format-LH.docx"
+                )
+                self.doc = Document(self.format_path)
+            except:
+                pass
 
     def write_body(self):
         self.doc.add_paragraph("We, the undersigned, declare that:")
         self.add_line(
-            "We have examined and have no reservations to the Bidding Documents, including Addenda issued in accordance with Instructions to Bidders (ITB) Clause8."
+            "We have examined and have no reservations to the Bidding Documents, including Addenda issued in accordance with Instructions to Bidders (ITB) Clause 8."
         )
 
         name = self.add_line(
@@ -143,13 +161,13 @@ class tech(letter):
         )
 
         self.add_line(
-            "Our firm, including any subcontractors or suppliers for any part of the Contract, have nationalities from eligible countries in accordance with ITB 4.2 and meet the requirements of ITB 3.4, & 3.5"
+            "Our firm, including any subcontractors or suppliers for any part of the Contract, have nationalities from eligible countries in accordance with ITB 4.2 and meet the requirements of ITB 3.4, & 3.5."
         )
         self.add_line(
             "We are not participating, as a Bidder or as a subcontractor, in more than one Bid in this bidding process in accordance with ITB 4.3(e), other than alternative offers submitted in accordance with ITB 13."
         )
         self.add_line(
-            "Our firm, its affiliates or subsidiaries, including any Subcontractors or Suppliers for any part of the contract, has not been declared ineligible by DP, under the Employer's country laws or official regulations or by an act of compliance with a decision of the United Nations Security Council;"
+            "Our firm, its affiliates or subsidiaries, including any Subcontractors or Suppliers for any part of the contract, has not been declared ineligible by DP, under the Employer's country laws or official regulations or by an act of compliance with a decision of the United Nations Security Council."
         )
         self.add_line("We are not a government owned entity.")
         self.add_line(
@@ -162,30 +180,41 @@ class tech(letter):
             "We agree to permit the Employer/DP or its representative to inspect our accounts and records and other documents relating to the bid submission and to have them audited by auditors appointed by the Employer."
         )
         self.add_line(
-            "If our Bid is accepted, we commit to mobilizing key equipment and personnel in accordance with the requirements set forth in Section III (Evaluation and Qualification Criteria) and our technical proposal, or as otherwise agreed with the Employer."
+            "If our Bid is accepted, we commit to mobilizing key equipment and personnel in accordance with the requirements set forth in Section VI (Works Requirement) and our technical proposal, or as otherwise agreed with the Employer."
         )
 
-        credit = self.add_line(
+        """credit = self.add_line(
             "We are committed to submit the Letter of Commitment for Banks Undertaking for Line of Credit of "
         )
         credit.add_run(self.line_of_cr).bold = True
         credit.add_run(
             " at the time of contract agreement, if the bid is awarded to us."
         )
+        """
         self.add_line(
-            "We declare that we have not participated in more than five (5) bidding process since 2078-12-03 i.e. March 17, 2022 in accordance with ITB 4.9;"
+            "We declare that we have not running contracts more than five (5) in accordance with ITB 4.9."
         )
 
 
 class price(letter):
-    heading = "Letter of Price Bid"
+    def __init__(self, *args):
+        letter.__init__(self, *args)
+        self.heading = "Letter of Price Bid"
+        if self.jv == 1:
+            try:
+                self.format_path = os.path.join(
+                    self.path_to_module, "PyBid-format-LH.docx"
+                )
+                self.doc = Document(self.format_path)
+            except:
+                pass
 
     def write_body(self):
         self.doc.add_paragraph("We, the undersigned, declare that:")
 
         # List starts
         self.add_line(
-            "We have examined and have no reservations to the Bidding Documents, including Addenda issued in accordance with Instructions to Bidders (ITB) Clause8."
+            "We have examined and have no reservations to the Bidding Documents, including Addenda issued in accordance with Instructions to Bidders (ITB) Clause 8."
         )
 
         name = self.add_line(
@@ -204,11 +233,11 @@ class price(letter):
         itb_18_1 = self.add_line("Our bid shall be valid for a period of ")
         itb_18_1.add_run(self.days).bold = True
         itb_18_1.add_run(
-            " from the date fixed for the bid submission deadline in accordance with the Bidding Documents, and it shall remain binding upon us and may be accepted at any time before the expiration of that period;"
+            " from the date fixed for the bid submission deadline in accordance with the Bidding Documents, and it shall remain binding upon us and may be accepted at any time before the expiration of that period."
         )
 
         self.add_line(
-            "If our bid is accepted, we commit to obtain a performance security in accordance with the Bidding Document;"
+            "If our bid is accepted, we commit to obtain a performance security in accordance with the Bidding Document"
         )
         self.add_line(
             "We have paid, or will pay the following commissions, gratuities, or fees with respect to the bidding process or execution of the Contract:"
@@ -234,7 +263,7 @@ class price(letter):
         none_none.add_run("None").italic = True
 
         self.add_line(
-            "We understand that this bid, together with your written acceptance thereof included in your notification of award, shall constitute a binding contract between us, until a formal contract is prepared and executed;"
+            "We understand that this bid, together with your written acceptance thereof included in your notification of award, shall constitute a binding contract between us, until a formal contract is prepared and executed"
         )
         self.add_line(
             "We understand that you are not bound to accept the lowest evaluated bid or any other bid that you may receive; and"
@@ -248,14 +277,24 @@ class price(letter):
 
 
 class bid(letter):
-    heading = "Letter of Bid"
+    def __init__(self, *args):
+        letter.__init__(self, *args)
+        self.heading = "Letter of Bid"
+        if self.jv == 1:
+            try:
+                self.format_path = os.path.join(
+                    self.path_to_module, "PyBid-format-LH.docx"
+                )
+                self.doc = Document(self.format_path)
+            except:
+                pass
 
     def write_body(self):
         self.doc.add_paragraph("We, the undersigned, declare that:")
 
         # List starts
         self.add_line(
-            "We have examined and have no reservations to the Bidding Documents, including Addenda issued in accordance with Instructions to Bidders (ITB) Clause8."
+            "We have examined and have no reservations to the Bidding Documents, including Addenda issued in accordance with Instructions to Bidders (ITB) Clause 8."
         )
 
         name = self.add_line(
@@ -274,33 +313,33 @@ class bid(letter):
         itb_18_1 = self.add_line("Our bid shall be valid for a period of ")
         itb_18_1.add_run(self.days).bold = True
         itb_18_1.add_run(
-            " from the date fixed for the bid submission deadline in accordance with the Bidding Documents, and it shall remain binding upon us and may be accepted at any time before the expiration of that period;"
+            " from the date fixed for the bid submission deadline in accordance with the Bidding Documents, and it shall remain binding upon us and may be accepted at any time before the expiration of that period."
         )
 
         self.add_line(
-            "If our bid is accepted, we commit to obtain a performance security in accordance with the Bidding Document;"
+            "If our bid is accepted, we commit to obtain a performance security in accordance with the Bidding Document."
         )
         self.add_line(
-            "Our firm, including any subcontractors or suppliers for any part of the Contract, have nationalities from eligible countries;"
+            "Our firm, including any subcontractors or suppliers for any part of the Contract, have nationalities from eligible countries."
         )
         self.add_line(
-            "We, including any subcontractors or suppliers for any part of the contract, do not have any conflict of interest in accordance with ITB 4.3;"
+            "We, including any subcontractors or suppliers for any part of the contract, do not have any conflict of interest in accordance with ITB 4.3."
         )
         self.add_line(
-            "We are not participating, as a Bidder or as a subcontractor, in more than one Bid in this bidding process in accordance with ITB 4.3;"
+            "We are not participating, as a Bidder or as a subcontractor, in more than one Bid in this bidding process in accordance with ITB 4.3."
         )
         self.add_line(
-            "Our firm, its affiliates or subsidiaries, including any Subcontractors or Suppliers for any part of the contract, has not been declared ineligible, under the Employer's country laws or official regulations or by an act of compliance with a decision of the United Nations Security Council;"
+            "Our firm, its affiliates or subsidiaries, including any Subcontractors or Suppliers for any part of the contract, has not been declared ineligible, under the Employer's country laws or official regulations or by an act of compliance with a decision of the United Nations Security Council."
         )
-        self.add_line("We are not a government owned entity;")
+        self.add_line("We are not a government owned entity.")
         self.add_line(
-            "We understand that this bid, together with your written acceptance thereof included in your notification of award, shall constitute a binding contract between us, until a formal contract is prepared and executed;"
+            "We understand that this bid, together with your written acceptance thereof included in your notification of award, shall constitute a binding contract between us, until a formal contract is prepared and executed."
         )
         self.add_line(
             "We declare that, we have not been black listed as per ITB 3.4 and no conflict of interest in the proposed procurement proceedings and we have not been punished for an offense relating to the concerned profession or business."
         )
         self.add_line(
-            "We declare that we have not participated in more than five (5) bidding process since 2078-12-03 i.e. March 17, 2022 in accordance with ITB 4.8;"
+            "We declare that we have not running contracts more than five (5) in accordance with ITB 4.8."
         )
         self.add_line(
             "We understand that you are not bound to accept the lowest evaluated bid or any other bid that you may receive; and"
@@ -317,7 +356,14 @@ class bid(letter):
 
 
 class declaration(letter):
-    heading = "Declaration by the Bidder"
+    def __init__(self, *args):
+        letter.__init__(self, *args)
+        self.heading = "Declaration by the Bidder"
+        try:
+            self.format_path = os.path.join(self.path_to_module, "PyBid-format-LH.docx")
+            self.doc = Document(self.format_path)
+        except:
+            pass
 
     def write_body(self):
         temp = self.doc.add_paragraph("We hereby declare that we, ")
@@ -327,10 +373,10 @@ class declaration(letter):
             " have gone through and understood the Bidding Document and we have prepared our Bid accordingly with signed and stamped in. We shall sign and stamp each page of contract agreement document in event of award of contract of us."
         )
         self.doc.add_paragraph(
-            "We further confirm that we have indicated price in schedule of Rates considering detailed description of item given in schedule of rates. We confirm that the rates quoted by us in schedule of rates include all activities in each item in relation with the performance the job."
+            "\nWe further confirm that we have indicated price in schedule of Rates considering detailed description of item given in schedule of rates. We confirm that the rates quoted by us in schedule of rates include all activities in each item in relation with the performance the job."
         ).alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         self.doc.add_paragraph(
-            "Moreover, we declare ourselves that our Firm has never been declared ineligible for the public procurement proceedings and do not have any conflicts of self interest in the proposed procurement proceeding and we have not been punished by an authority in the related profession or business till this date."
+            "\nMoreover, we declare ourselves that our Firm has never been declared ineligible for the public procurement proceedings and do not have any conflicts of self interest in the proposed procurement proceeding and we have not been punished by an authority in the related profession or business till this date."
         ).alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         self.doc.add_paragraph("\n" * 4)
         temp = self.doc.add_paragraph()
@@ -339,11 +385,7 @@ class declaration(letter):
         temp.add_run(f"\n({self.designation})").bold = True
         temp.add_run("\nSeal of the Firm")
 
-    def write_details(self):
-        self.doc.add_paragraph("\n")
-        letter.write_details(self)
-
-    def create_doc(self, size):
+    def create_doc(self):
         for section in self.doc.sections:
             section.top_margin = Inches(1)
             section.bottom_margin = Inches(1)
@@ -352,13 +394,22 @@ class declaration(letter):
 
         self.write_details()
         self.write_inside_addr()
-        self.write_title(size)
+        self.write_title()
         self.write_body()
         self.save_file()
 
 
 class poa_self(declaration):
-    heading = "Subject: Power of Attorney"
+    def __init__(self, *args):
+        letter.__init__(self, *args)
+        self.heading = "Power of Attorney"
+        try:
+            self.format_path = os.path.join(
+                self.path_to_module, "PyBid-format-PoASelf.docx"
+            )
+            self.doc = Document(self.format_path)
+        except:
+            pass
 
     def write_body(self):
         self.doc.add_paragraph("Dear Sir,")
@@ -387,14 +438,17 @@ class poa_self(declaration):
 
 
 class jv_agr(letter):
-    heading = "jvAgr"
+    def __init__(self, *args):
+        letter.__init__(self, *args)
+        self.heading = "jvAgr"
 
     def write_body(self):
         temp = self.doc.paragraphs[0]
-        temp.add_run("JOINT VENTURE AGREEMENT").underline = True
-        temp.runs[0].bold = True
-        temp = self.doc.add_paragraph("This AGREEMENT of JOINT VENTURE is made on ")
         temp.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        run = temp.add_run("JOINT VENTURE AGREEMENT")
+        run.underline = True
+        run.bold = True
+        temp.add_run("\t\nThis AGREEMENT of JOINT VENTURE is made on ")
         temp.add_run(self.date).bold = True
         if len(self.jvList) > 2:
             temp.add_run(" among ")
@@ -410,8 +464,6 @@ class jv_agr(letter):
                 temp.add_run(
                     f' (hereinafter called the "{ordinal(partner[0])} Partner")'
                 )
-            # elif partner[0] == str(len(self.jvList)):
-            #     temp.add_run(' (hereinafter called the "Second Partner(s)")')
 
             if partner[0] == str(len(self.jvList) - 1):
                 temp.add_run(" and ")
@@ -419,8 +471,7 @@ class jv_agr(letter):
                 temp.add_run(", ")
 
         temp.add_run("of the Joint Venture.")
-
-        temp = self.doc.add_paragraph("Whereas, ")
+        temp.add_run("\t\nWhereas, ")
         temp.add_run(" ".join(self.to.split("\n")[1:])).bold = True
         temp.add_run(
             ' (hereinafter called the "The Employer") has invited the bid for the '
@@ -428,7 +479,7 @@ class jv_agr(letter):
         temp.add_run(self.contract_name).bold = True
         temp.add_run(", Contract No.: ")
         temp.add_run(self.contract_ID).bold = True
-        temp.add_run(' (hereinafter called "The Works").\n')
+        temp.add_run(' (hereinafter called "The Works").\t\n')
 
         temp.add_run(
             'NOW WE UNDERSIGNED, responsible and authorized representatives of the "Joint Venture Partners" namely Partner-In-charge and Secondary Partner(s) DO AGREE as follows:'
@@ -522,10 +573,11 @@ class jv_agr(letter):
             else:
                 table.rows[0].cells[i].text = "Partner-In-Charge"
 
-            txt = "\n" * 7
+            txt = "\n" * 6
             for j in range(1, 5):
                 txt += "\n" + partner[j]
             table.rows[1].cells[i].text = txt
+            table.rows[1].cells[i].alignment = WD_ALIGN_PARAGRAPH.LEFT
 
     def create_doc(self):
         for section in self.doc.sections:
@@ -538,18 +590,26 @@ class jv_agr(letter):
         self.save_file()
 
 
-class poa(jv_agr):
-    heading = "PoA"
+class jv_poa(jv_agr):
+    def __init__(self, *args):
+        letter.__init__(self, *args)
+        self.heading = "jvPoA"
+        try:
+            self.format_path = os.path.join(
+                self.path_to_module, "PyBid-format-jvPoA.docx"
+            )
+            self.doc = Document(self.format_path)
+        except:
+            pass
 
-    def write_date(self):
-        temp = self.doc.paragraphs[0]
-        temp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-        temp.add_run("\n\n\n\n\n\nDate: ")
-        temp.add_run(self.date).bold = True
+    def write_title(self):
+        title = self.doc.add_paragraph("Date: ")
+        title.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        title.add_run(self.date).bold = True
 
     def write_body(self):
-        temp = self.doc.add_paragraph("Sub: Power of Attorney")
-        temp.bold = True
+        temp = self.doc.add_paragraph("Sub: JV Power of Attorney")
+        temp.runs[0].bold = True
         temp.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
         self.doc.add_paragraph("Dear Sir / Madam,")
@@ -596,8 +656,73 @@ class poa(jv_agr):
             section.bottom_margin = Inches(0.5)
             section.left_margin = Inches(0.5)
             section.right_margin = Inches(0.5)
-        self.write_date()
+        if self.jv == 2:
+            self.write_jv_head()
+        self.write_title()
         self.write_inside_addr()
         self.write_body()
         self.create_table()
         self.save_file()
+
+
+class sealedQ(letter):
+    def __init__(self, *args):
+        bid.__init__(self, *args)
+        self.heading = "Letter of Bid"
+        try:
+            self.format_path = os.path.join(self.path_to_module, "PyBid-format-LH.docx")
+            self.doc = Document(self.format_path)
+        except:
+            pass
+
+    def write_details(self):
+        details = self.doc.add_paragraph("Date: ")
+        details.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        details.add_run(self.date).bold = True
+        details.add_run("\nName of the contract: ")
+        details.add_run(self.contract_name).bold = True
+        details.add_run("\nInvitation for Bid No.: ")
+        details.add_run(self.IoB).bold = True
+        details.add_run("\nSealed Quotation No.: ")
+        details.add_run(self.contract_ID).bold = True
+
+    def write_body(self):
+        self.doc.add_paragraph("We, the undersigned, declare that:")
+        self.add_line(
+            "We have examined and have no reservations to the Bidding Documents."
+        )
+        name = self.add_line(
+            "We offer to execute in conformity with the Bidding Documents the following Works: "
+        )
+        name.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        name.add_run(self.contract_ID).bold = True
+        self.add_line(
+            "The total price of our Bid, excluding any discounts offered in item (d) below is:…………………………, or when left blank, is the price quoted in Bill of Quantities."
+        )
+        self.add_line(
+            "The discounts offered and the methodology for their application are:………………………………………"
+        )
+        validity = self.add_line("Our bid shall be valid for a period of ")
+        validity.add_run(self.days).bold = True
+        validity.add_run(
+            " from the date fixed for the bid submission deadline in accordance with the Bidding Documents, and it shall remain binding upon us and may be accepted at any time before the expiration of that period;"
+        )
+        self.add_line(
+            "If our bid is accepted, we commit to obtain a performance security in accordance with the Bidding Document;"
+        )
+        self.add_line(
+            "We understand that this bid, together with your written acceptance thereof included in your notification of award, shall constitute a binding contract between us, until a formal contract is prepared and executed;"
+        )
+        self.add_line(
+            "We declare that, we have not been black listed and no conflict of interest in the proposed procurement proceedings and we have not been punished for an offense relating to the concerned profession or business."
+        )
+        self.add_line(
+            "We understand that you are not bound to accept the lowest evaluated bid or any other bid that you may receive; and"
+        )
+        representative = self.add_line(
+            "If awarded the contract, the person named below shall act as Contractor’s Representative: "
+        )
+        representative.add_run(self.person).bold = True
+        self.add_line(
+            "We agree to permit the Employer/DP or its representative to inspect our accounts and records and other documents relating to the bid submission and to have them audited by auditors appointed by the Employer. "
+        )

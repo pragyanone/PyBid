@@ -4,7 +4,7 @@ import os
 import pickle
 from .classes import *
 
-settings_path = os.path.join(os.path.dirname(__file__), "PyBid-settings.pkl")
+settings_path = os.path.join("PyBid-settings.pkl")
 
 
 def generate_documents():
@@ -65,16 +65,19 @@ def generate_documents():
             LoPB = price(*args)
             LoTB.create_doc()
             LoPB.create_doc()
+        elif small_or_large.get() == 3:
+            LoB = sealedQ(*args)
+            LoB.create_doc()
         DbtB = declaration(*args)
-        DbtB.create_doc(24)
+        DbtB.create_doc()
         if single_or_jv.get() == 2:
             jvAgr = jv_agr(*args)
             jvAgr.create_doc()
-            PoA = poa(*args)
-            PoA.create_doc()
-        if "pvt" not in firm_name.get().lower():
-            PoAself = poa_self(*args)
-            PoAself.create_doc(12)
+            JVPoA = jv_poa(*args)
+            JVPoA.create_doc()
+        # if "pvt" not in firm_name.get().lower():
+        #    PoAself = poa_self(*args)
+        #    PoAself.create_doc()
     except Exception as e:
         import traceback
 
@@ -83,7 +86,7 @@ def generate_documents():
         resultColor = "Pink"
 
     EndofCode_label = tk.Label(contract_frame, text=result, bg=resultColor)
-    EndofCode_label.grid(row=7, column=2, rowspan=4, padx=20, sticky="nsew")
+    EndofCode_label.grid(padx=20, row=7, column=2, rowspan=4, sticky="nsew")
 
 
 def check_status(event=None):
@@ -165,7 +168,7 @@ def load_previous():
 
 ## Gui
 root = tk.Tk()
-root.title("PyBid")
+root.title("PyBid (ShresthaPragyan.com.np)")
 gui_size = "1000x500"
 root.geometry(gui_size + "+0+0")
 root.columnconfigure(0, weight=1)
@@ -174,6 +177,7 @@ root.rowconfigure(1, weight=1)
 firm_name = tk.StringVar()
 firm_addr = tk.StringVar()
 single_or_jv = tk.IntVar()
+single_or_jv.set(1)
 short_name = tk.StringVar()
 IoB = tk.StringVar()
 contract_ID = tk.StringVar()
@@ -249,7 +253,7 @@ jv_repr_label = tk.Label(jvSubFrame, text="JV Representative", bg="Snow3")
 jv_repr_entry = tk.Entry(jvSubFrame, textvariable=jv_repr)
 jv_list_label = tk.Label(
     jvSubFrame,
-    text="JV Partners' Details\n( JVrank; Authorized Person; Post; Company; Address; Percentage )",
+    text="JV Partners' Details\n( JVrank;    Authorized Person;    Post;    Company;    Address;    Percentage )",
 )
 jv_list_text = tk.Text(jvSubFrame, height=4, wrap="word")
 
@@ -301,7 +305,7 @@ bid_validity_period_entry.grid(row=5, column=1, sticky="ew")
 
 small_radio = tk.Radiobutton(
     contract_frame,
-    text="Letter of Bid",
+    text="Single Envelope",
     variable=small_or_large,
     value=1,
     command=check_status,
@@ -311,7 +315,7 @@ small_radio.grid(row=6, column=1, sticky="w")
 
 large_radio = tk.Radiobutton(
     contract_frame,
-    text="Letter of Technical Bid & Letter of Price Bid",
+    text="Double Envelope",
     variable=small_or_large,
     value=2,
     command=check_status,
@@ -319,12 +323,22 @@ large_radio = tk.Radiobutton(
 )
 large_radio.grid(row=7, column=1, sticky="w")
 
+sealedQ_radio = tk.Radiobutton(
+    contract_frame,
+    text="Sealed Quotation",
+    variable=small_or_large,
+    value=3,
+    command=check_status,
+    bg="azure3",
+)
+sealedQ_radio.grid(row=8, column=1, sticky="w")
+
 loc_label = tk.Label(contract_frame, text="Line of Credit", bg="azure3")
-loc_label.grid(sticky="e")
+# loc_label.grid(sticky="e")
 
 loc_entry = tk.Entry(contract_frame, textvariable=loc)
 loc_entry.configure(state="disabled")
-loc_entry.grid(row=8, column=1, sticky="ew")
+# loc_entry.grid(row=8, column=1, sticky="ew")
 
 auth_person_label = tk.Label(contract_frame, text="Authorized Person", bg="azure3")
 auth_person_label.grid(row=11, column=0, sticky="e")
@@ -356,12 +370,12 @@ date_entry.grid(row=12, column=1, sticky="ew")
 load_previous_button = tk.Button(
     contract_frame, text="Load Previous Data", command=load_previous
 )
-load_previous_button.grid(row=1, column=2, columnspan=2, padx=15, pady=15)
+load_previous_button.grid(padx=15, pady=15, row=1, column=2, columnspan=2)
 
 generate_button = tk.Button(
     contract_frame, text="Generate Documents", command=generate_documents
 )
-generate_button.grid(row=12, column=2, columnspan=2, padx=15, pady=15)
+generate_button.grid(padx=15, pady=15, row=12, column=2, columnspan=2)
 generate_button.configure(state="disabled")
 
 firm_name_entry.bind("<FocusOut>", lambda _: prettify(firm_name_entry))
