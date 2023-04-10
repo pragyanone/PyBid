@@ -2,7 +2,7 @@ import tkinter as tk
 from pathlib import Path
 import os
 import pickle
-from .classes import *
+from classes import *
 
 settings_path = os.path.join("PyBid-settings.pkl")
 
@@ -168,7 +168,7 @@ def load_previous():
 
 ## Gui
 root = tk.Tk()
-root.title("PyBid (ShresthaPragyan.com.np)")
+root.title("PyBid -Siddhababa (ShresthaPragyan.com.np)")
 gui_size = "1000x500"
 root.geometry(gui_size + "+0+0")
 root.columnconfigure(0, weight=1)

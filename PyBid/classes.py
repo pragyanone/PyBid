@@ -1,7 +1,7 @@
 from docx import Document
 from docx.shared import Inches, Pt, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from .num2words import num2words, ordinal
+from num2words import num2words, ordinal
 import os
 
 
@@ -63,7 +63,8 @@ class letter:
     def write_title(self, size=16):
         title = self.doc.paragraphs[0]
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        if self.jv == 1 or (self.jv == 2 and "Letter" not in self.heading):
+        # if self.jv == 1 or (self.jv == 2 and "Letter" not in self.heading):
+        if "format.docx" in self.format_path:
             title.add_run("\n" * 4)
         run = title.add_run(self.heading)
         run.underline = run.bold = True
@@ -77,8 +78,9 @@ class letter:
         details.add_run(self.contract_name).bold = True
         details.add_run("\nInvitation for Bid No.: ")
         details.add_run(self.IoB).bold = True
-        details.add_run("\nContract Identification No.: ")
-        details.add_run(self.contract_ID).bold = True
+        if not "Letter" in self.heading:
+            details.add_run("\nContract Identification No.: ")
+            details.add_run(self.contract_ID).bold = True
 
     def write_inside_addr(self):
         inside_addr = self.doc.add_paragraph("To:\n")
@@ -373,10 +375,10 @@ class declaration(letter):
             " have gone through and understood the Bidding Document and we have prepared our Bid accordingly with signed and stamped in. We shall sign and stamp each page of contract agreement document in event of award of contract of us."
         )
         self.doc.add_paragraph(
-            "\nWe further confirm that we have indicated price in schedule of Rates considering detailed description of item given in schedule of rates. We confirm that the rates quoted by us in schedule of rates include all activities in each item in relation with the performance the job."
+            "We further confirm that we have indicated price in schedule of Rates considering detailed description of item given in schedule of rates. We confirm that the rates quoted by us in schedule of rates include all activities in each item in relation with the performance the job."
         ).alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         self.doc.add_paragraph(
-            "\nMoreover, we declare ourselves that our Firm has never been declared ineligible for the public procurement proceedings and do not have any conflicts of self interest in the proposed procurement proceeding and we have not been punished by an authority in the related profession or business till this date."
+            "Moreover, we declare ourselves that our Firm has never been declared ineligible for the public procurement proceedings and do not have any conflicts of self interest in the proposed procurement proceeding and we have not been punished by an authority in the related profession or business till this date."
         ).alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         self.doc.add_paragraph("\n" * 4)
         temp = self.doc.add_paragraph()
@@ -656,8 +658,7 @@ class jv_poa(jv_agr):
             section.bottom_margin = Inches(0.5)
             section.left_margin = Inches(0.5)
             section.right_margin = Inches(0.5)
-        if self.jv == 2:
-            self.write_jv_head()
+        self.write_jv_head()
         self.write_title()
         self.write_inside_addr()
         self.write_body()
