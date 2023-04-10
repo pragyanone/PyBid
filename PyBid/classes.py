@@ -1,7 +1,7 @@
 from docx import Document
 from docx.shared import Inches, Pt, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from num2words import num2words, ordinal
+from .num2words import num2words, ordinal
 import os
 
 
