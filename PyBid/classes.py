@@ -64,8 +64,7 @@ class letter:
         title = self.doc.paragraphs[0]
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
         # if self.jv == 1 or (self.jv == 2 and "Letter" not in self.heading):
-        if "format.docx" in self.format_path:
-            title.add_run("\n" * 4)
+        title.add_run("\n" * 4)
         run = title.add_run(self.heading)
         run.underline = run.bold = True
         run.font.size = Pt(size)
@@ -400,6 +399,12 @@ class declaration(letter):
         self.write_body()
         self.save_file()
 
+    def save_file(self):
+        filename = (
+            self.path + os.path.sep + "Declaration" + " -" + self.short_name + ".docx"
+        )
+        self.doc.save(filename)
+
 
 class poa_self(declaration):
     def __init__(self, *args):
@@ -464,7 +469,7 @@ class jv_agr(letter):
                 temp.add_run(' (hereinafter called the "Partner-In-Charge")')
             else:
                 temp.add_run(
-                    f' (hereinafter called the "{ordinal(partner[0])} Partner")'
+                    f' (hereinafter called the "{ordinal(partner[0])} Partner" or "Secondary Partner")'
                 )
 
             if partner[0] == str(len(self.jvList) - 1):
@@ -629,15 +634,17 @@ class jv_poa(jv_agr):
         temp.add_run(' (hereinafter called "The Works").')
 
         self.add_line(
-            "To sign contract agreement document on behalf of the joint venture."
+            "To purchase bid document, prepare bank guarantees, submit bid on behalf of the joint venture."
         )
         self.add_line(
-            "To do all construction activities related with the contract, submit bills, and receive payment on behalf of the joint venture."
+            "To sign contract agreement document on behalf of the joint venture."
         )
         self.add_line(
             "To open a bank account and operate on behalf of the joint venture."
         )
-
+        self.add_line(
+            "To do all construction activities related with The Works including submit bills, and receive payments on behalf of the joint venture."
+        )
         self.doc.add_paragraph(
             "As the joint venture hereby agree that all aforesaid acts, deeds and things done by the authorized jv representative shall be constructed as acts, deeds and things done by the joint venture and undertakes to rectify and conform all and whatsoever the authorized jv representative shall lawfully do the case to be done for joint venture of power hereby given."
         ).alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
